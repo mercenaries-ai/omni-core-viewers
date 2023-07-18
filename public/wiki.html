@@ -31,21 +31,24 @@
   </head>
   <body class="flex items-start justify-center h-full ">
     <div class="flex items-center justify-center w-full h-full max-w-full">
-      <div id='content' class="w-full h-full markdown-body"></div>
+      <div id='content' class="w-full h-full markdown-body">Loading...</div>
 
     </div>
     <script async type="module">
+      import insane from 'https://cdn.jsdelivr.net/npm/insane@2.6.2/+esm'
       window.content =''
       const boot = async () =>
       {
+
       const args = new URLSearchParams(location.search)
       const params = JSON.parse(args.get('q'))
-        if (params.item)
+        if (params.repo && params.page)
         {
-            let x = await fetch(params.item)
+            let url = `https://raw.githubusercontent.com/wiki/${params.repo}/${params.page}.md`
+            let x = await fetch(url)
             window._item = await x.text()
             let content = document.getElementById('content')
-            content.innerHTML = window.marked.parse(window._item)
+            content.innerHTML = insane(marked.parse(window._item, {headerIds: false, mangle: false}))
         }
       }
       await boot()
