@@ -43,9 +43,8 @@
         if (params.item)
         {
             let x = await fetch(params.item)
-            window._item = await x.text()
             let content = document.getElementById('content')
-            content.innerHTML = window.marked.parse(window._item)
+            content.innerHTML = window.marked.parse( await x.text() || 'No content')
         }
       }
       await boot()
