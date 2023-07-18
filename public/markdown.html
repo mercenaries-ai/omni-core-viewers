@@ -40,9 +40,9 @@
       {
       const args = new URLSearchParams(location.search)
       const params = JSON.parse(args.get('q'))
-        if (params.item)
+        if (params.url)
         {
-            let x = await fetch(params.item)
+            let x = await fetch(params.url)
             let content = document.getElementById('content')
             content.innerHTML = window.marked.parse( await x.text() || 'No content')
         }
