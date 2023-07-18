@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .markdown-body {
+        box-sizing: border-box;
+        min-width: 200px;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 45px;
+      }
+
+      @media (max-width: 767px) {
+        .markdown-body {
+          padding: 15px;
+        }
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css" integrity="sha512-bm684OXnsiNuQSyrxuuwo4PHqr3OzxPpXyhT66DA/fhl73e1JmBxRKGnO/nRwWvOZxJLRCmNH7FII+Yn1JNPmg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/5.1.1/marked.min.js" integrity="sha512-geNSPsVaubOv19D7VZY9lJH7MNdRkIq84doaoubf6zknjXsyBQ77XQbqiHX89Mg3e+67E16huocEGUlR4Pgjtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Include the TailwindCSS library on your page -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+  </head>
+  <body class="flex items-start justify-center h-full ">
+    <div class="flex items-center justify-center w-full h-full max-w-full">
+      <div id='content' class="w-full h-full markdown-body"></div>
+
+    </div>
+    <script async type="module">
+      window.content =''
+      const boot = async () =>
+      {
+      const args = new URLSearchParams(location.search)
+      const params = JSON.parse(args.get('q'))
+        if (params.item)
+        {
+            let x = await fetch(params.item)
+            window._item = await x.text()
+            let content = document.getElementById('content')
+            content.innerHTML = window.marked.parse(window._item)
+
+        }
+      }
+      await boot()
+
+  </script>
+
+  </body>
+</html>

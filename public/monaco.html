@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monaco Editor</title>
+    <style>
+      [x-cloak] {
+        display: none;
+      }
+    </style>
+    <!-- Include the Alpine library on your page -->
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <!-- Include the TailwindCSS library on your page -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script async type="module">
+        window._item =''
+        const boot = async () =>
+        {
+        const args = new URLSearchParams(location.search)
+        const params = JSON.parse(args.get('q'))
+          if (params.item)
+          {
+              let x = await fetch(params.item)
+              window._item = await x.text()
+          }
+        }
+        await boot()
+
+    </script>
+
+  </head>
+  <body class="flex items-start justify-center h-screen bg-gray-50">
+    <div class="flex items-center justify-center w-full h-screen max-w-full">
+      <!-- Element Here -->
+
+      <div x-data="{
+        monacoContent: window._item,
+        monacoLanguage: 'markdown',
+        monacoPlaceholder: false,
+        monacoPlaceholderText: 'Start typing here',
+        monacoLoader: true,
+        monacoFontSize: '15px',
+        monacoId: $id('monaco-editor'),
+        monacoEditor(editor){
+            editor.onDidChangeModelContent((e) => {
+                this.monacoContent = editor.getValue();
+                this.updatePlaceholder(editor.getValue());
+            });
+
+            editor.onDidBlurEditorWidget(() => {
+                this.updatePlaceholder(editor.getValue());
+            });
+
+            editor.onDidFocusEditorWidget(() => {
+                this.updatePlaceholder(editor.getValue());
+            });
+        },
+        updatePlaceholder: function(value) {
+            if (value == '') {
+                this.monacoPlaceholder = true;
+                return;
+            }
+            this.monacoPlaceholder = false;
+        },
+        monacoEditorFocus(){
+            document.getElementById(this.monacoId).dispatchEvent(new CustomEvent('monaco-editor-focused', { monacoId: this.monacoId }));
+        },
+        monacoEditorAddLoaderScriptToHead() {
+            script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/loader.min.js';
+            document.head.appendChild(script);
+        }
+    }"
+    x-init="
+
+        if(typeof _amdLoaderGlobal == 'undefined'){
+            monacoEditorAddLoaderScriptToHead();
+        }
+
+        monacoLoaderInterval = setInterval(function(){
+            if(typeof _amdLoaderGlobal !== 'undefined'){
+
+                // Based on https://jsfiddle.net/developit/bwgkr6uq/ which works without needing service worker. Provided by loader.min.js.
+                require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs' }});
+                let proxy = URL.createObjectURL(new Blob([` self.MonacoEnvironment = { baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min' }; importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.39.0/min/vs/base/worker/workerMain.min.js');`], { type: 'text/javascript' }));
+                window.MonacoEnvironment = { getWorkerUrl: () => proxy };
+
+                require(['vs/editor/editor.main'], function() {
+
+                       document.getElementById(monacoId).editor = monaco.editor.create($refs.monacoEditorElement, {
+                        value: window._item,
+                        readOnly: true,
+                        fontSize: monacoFontSize,
+                        lineNumbers: 'off',
+                        //lineNumbersMinChars: 3,
+                        automaticLayout: true,
+                        language: monacoLanguage
+                    });
+                    monacoEditor(document.getElementById(monacoId).editor);
+                    document.getElementById(monacoId).addEventListener('monaco-editor-focused', function(event){
+                        document.getElementById(monacoId).editor.focus();
+                    });
+                    updatePlaceholder(document.getElementById(monacoId).editor.getValue());
+
+                });
+
+                clearInterval(monacoLoaderInterval);
+                monacoLoader = false;
+            }
+        }, 5);
+    " :id="monacoId" class="flex flex-col items-center relative justify-start w-full bg-white min-h-[250px] pt-3 h-screen">
+    <div x-show="monacoLoader" class="absolute inset-0 z-20 flex items-center justify-center w-full h-full duration-1000 ease-out">
+        <svg class="w-4 h-4 text-gray-400 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24 "><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+    </div>
+
+    <div x-show="!monacoLoader" class="relative z-10 w-full h-full">
+        <div x-ref="monacoEditorElement" class="w-full h-full text-lg"></div>
+        <div x-ref="monacoPlaceholderElement" x-show="monacoPlaceholder" @click="monacoEditorFocus()" :style="'font-size: ' + monacoFontSize" class="w-full text-sm font-mono absolute z-50 text-gray-500 ml-14 -translate-x-0.5 mt-0.5 left-0 top-0" x-text="monacoPlaceholderText"></div>
+    </div>
+</div>
+    </div>
+  </body>
+</html>

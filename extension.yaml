@@ -1,0 +1,7 @@
+title: Core Viewer and Editors
+version: 0.0.1
+description: Viewers / Editors for common file types.
+author: Mercenaries.ai Team
+origin: https://github.com/mercenaries-ai/omni-core-viewers.git
+client:
+  addToWorkbench: false
