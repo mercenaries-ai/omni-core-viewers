@@ -50,7 +50,18 @@
             let x = await fetch(url)
             window._item = await x.text()
 
+            // Enforce links opening in new tab
+            // https://github.com/markedjs/marked/pull/1371#issuecomment-434320596
+            var renderer = new marked.Renderer();
+            renderer.link = function(href, title, text) {
+                var link = marked.Renderer.prototype.link.apply(this, arguments);
+                return link.replace("<a","<a target='_blank'");
+            };
+
+            window.marked.setOptions({targetBlank: true, headerIds: false, mangle: false, renderer: renderer})
             content.innerHTML = insane(marked.parse(window._item, {headerIds: false, mangle: false}))
+
+
         }
 
         if(opts.mode === 'floating')

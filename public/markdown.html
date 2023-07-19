@@ -35,6 +35,7 @@
 
     </div>
     <script async type="module">
+      import insane from 'https://cdn.jsdelivr.net/npm/insane@2.6.2/+esm'
       window.content =''
       const boot = async () =>
       {
@@ -44,7 +45,14 @@
         {
             let x = await fetch(params.url)
             let content = document.getElementById('content')
-            content.innerHTML = window.marked.parse( await x.text() || 'No content')
+            var renderer = new marked.Renderer();
+            renderer.link = function(href, title, text) {
+                var link = marked.Renderer.prototype.link.apply(this, arguments);
+                return link.replace("<a","<a target='_blank'");
+            };
+
+            window.marked.setOptions({targetBlank: true, headerIds: false, mangle: false, renderer: renderer})
+            content.innerHTML = insane(window.marked.parse( await x.text() || 'No content'))
         }
       }
       await boot()
