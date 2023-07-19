@@ -39,21 +39,38 @@
       window.content =''
       const boot = async () =>
       {
+
+      let content = document.getElementById('content')
       const args = new URLSearchParams(location.search)
+
       const params = JSON.parse(args.get('q'))
+        let rawText = ''
         if (params.url)
         {
             let x = await fetch(params.url)
-            let content = document.getElementById('content')
-            var renderer = new marked.Renderer();
-            renderer.link = function(href, title, text) {
-                var link = marked.Renderer.prototype.link.apply(this, arguments);
-                return link.replace("<a","<a target='_blank'");
-            };
-
-            window.marked.setOptions({targetBlank: true, headerIds: false, mangle: false, renderer: renderer})
-            content.innerHTML = insane(window.marked.parse( await x.text() || 'No content'))
+            rawText = await x.text()
         }
+        else if (param.data)
+        {
+            rawText = param.data
+        }
+        else if (param.markdown)
+        {
+            rawText = param.markdown
+        }
+        else if (param.text)
+        {
+            rawText = param.text
+        }
+
+        const renderer = new marked.Renderer();
+          renderer.link = function(href, title, text) {
+              const link = marked.Renderer.prototype.link.apply(this, arguments);
+              return link.replace("<a","<a target='_blank'");
+          };
+
+        window.marked.setOptions({targetBlank: true, headerIds: false, mangle: false, renderer: renderer})
+        content.innerHTML = insane(window.marked.parse( await x.text() || 'No content'))
       }
       await boot()
 
