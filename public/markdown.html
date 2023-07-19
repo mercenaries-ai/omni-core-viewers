@@ -70,7 +70,7 @@
           };
 
         window.marked.setOptions({targetBlank: true, headerIds: false, mangle: false, renderer: renderer})
-        content.innerHTML = insane(window.marked.parse( await x.text() || 'No content'))
+        content.innerHTML = insane(window.marked.parse( rawText || 'No content'))
       }
       await boot()
 
