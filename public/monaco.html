@@ -20,12 +20,22 @@
         const boot = async () =>
         {
         const args = new URLSearchParams(location.search)
+        let rawText = ''
         const params = JSON.parse(args.get('q'))
           if (params.url)
           {
               let x = await fetch(params.url)
-              window._item = await x.text()
+              rawText = await x.text()
           }
+          else if (param.data)
+          {
+              rawText = param.data
+          }
+          else if (param.text)
+          {
+              rawText = param.text
+          }
+          window._item = rawText || ''
         }
         await boot()
 
