@@ -1,0 +1,7 @@
+title: Pdf Viewer Extension
+version: 0.0.1
+description: An a pseudo-3d flipbook based on Mozilla's excellent [PDF.js](https://github.com/mozilla/pdf.js/r) to open pdfs in app
+author: Georg Zoeller
+origin: https://github.com/georgzoeller/omni-extension-pdf
+client:
+  addToWorkbench: true
