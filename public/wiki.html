@@ -42,14 +42,23 @@
 
       const args = new URLSearchParams(location.search)
       const params = JSON.parse(args.get('q'))
+      const opts = JSON.parse(args.get('o') || {} )
+      let content = document.getElementById('content')
         if (params.repo && params.page)
         {
             let url = `https://raw.githubusercontent.com/wiki/${params.repo}/${params.page}.md`
             let x = await fetch(url)
             window._item = await x.text()
-            let content = document.getElementById('content')
+
             content.innerHTML = insane(marked.parse(window._item, {headerIds: false, mangle: false}))
         }
+
+        if(opts.mode === 'floating')
+        {
+          content.classList.remove('mt-10')
+          content.classList.add('bg-yellow-100')
+        }
+
       }
       await boot()
 
