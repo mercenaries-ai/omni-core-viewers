@@ -50,17 +50,17 @@
             let x = await fetch(params.url)
             rawText = await x.text()
         }
-        else if (param.data)
+        else if (params.data)
         {
-            rawText = param.data
+            rawText = params.data
         }
-        else if (param.markdown)
+        else if (params.markdown)
         {
-            rawText = param.markdown
+            rawText = params.markdown
         }
-        else if (param.text)
+        else if (params.text)
         {
-            rawText = param.text
+            rawText = params.text
         }
 
         const renderer = new marked.Renderer();
