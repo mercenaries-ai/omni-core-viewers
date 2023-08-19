@@ -25,7 +25,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/5.1.1/marked.min.js" integrity="sha512-geNSPsVaubOv19D7VZY9lJH7MNdRkIq84doaoubf6zknjXsyBQ77XQbqiHX89Mg3e+67E16huocEGUlR4Pgjtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Include the TailwindCSS library on your page -->
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="./main.js" type="module" defer></script>
+
+
+    <script>
+
+      const processMdx = (content) =>
+      {
+
+        let button = 
+        content = content.replace(`{:button/help:}`, `<button class='btn btn-primary' style='width: 40px; height: 20px; color: black; border-color: black;' type='button' onclick='window.parent.client.runScript("help");'>[HELP]</button>`)
+        return content
+      }
+
+    </script>
 
 
   </head>
@@ -40,38 +54,7 @@
       const boot = async () =>
       {
 
-      let content = document.getElementById('content')
-      const args = new URLSearchParams(location.search)
-
-      const params = JSON.parse(args.get('q'))
-        let rawText = ''
-        if (params.url)
-        {
-            let x = await fetch(params.url)
-            rawText = await x.text()
-        }
-        else if (params.data)
-        {
-            rawText = params.data
-        }
-        else if (params.markdown)
-        {
-            rawText = params.markdown
-        }
-        else if (params.text)
-        {
-            rawText = params.text
-        }
-
-        const renderer = new marked.Renderer();
-          renderer.link = function(href, title, text) {
-              const link = marked.Renderer.prototype.link.apply(this, arguments);
-              return link.replace("<a","<a target='_blank'");
-          };
-
-        window.marked.setOptions({targetBlank: true, headerIds: false, mangle: false, renderer: renderer})
-        content.innerHTML = insane(window.marked.parse( rawText || 'No content'))
-      }
+    }
       await boot()
 
   </script>
