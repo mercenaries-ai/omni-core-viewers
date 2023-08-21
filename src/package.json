@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "alpinejs": "^3.12.3",
+    "assignment": "2.2.0",
     "handlebars": "^4.7.8",
-    "insane": "^2.6.2",
     "marked": "^7.0.3"
   }
 }

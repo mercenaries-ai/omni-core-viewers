@@ -320,6 +320,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"assignment@npm:2.2.0":
+  version: 2.2.0
+  resolution: "assignment@npm:2.2.0"
+  checksum: e4a0c15aa69a61c0b703e85e7c39af4fb626eac64fac7e5f553e6547fc7c0751f2053d1df39e78044bfb841e2c143da2caca7f91302eaa67dfc18c4d07430d7e
+  languageName: node
+  linkType: hard
+
 "balanced-match@npm:^1.0.0":
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
@@ -1231,6 +1238,7 @@ __metadata:
   resolution: "omni-core-viewers@workspace:."
   dependencies:
     alpinejs: ^3.12.3
+    assignment: 2.2.0
     esbuild: ^0.18.4
     esbuild-sass-plugin: ^2.10.0
     handlebars: ^4.7.8

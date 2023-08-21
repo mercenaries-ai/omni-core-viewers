@@ -21,43 +21,19 @@
       }
     </style>
 
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css" integrity="sha512-bm684OXnsiNuQSyrxuuwo4PHqr3OzxPpXyhT66DA/fhl73e1JmBxRKGnO/nRwWvOZxJLRCmNH7FII+Yn1JNPmg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/5.1.1/marked.min.js" integrity="sha512-geNSPsVaubOv19D7VZY9lJH7MNdRkIq84doaoubf6zknjXsyBQ77XQbqiHX89Mg3e+67E16huocEGUlR4Pgjtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <!-- Include the TailwindCSS library on your page -->
-
     <script src="./main.js" type="module" defer></script>
 
 
-    <script>
-
-      const processMdx = (content) =>
-      {
-
-        let button = 
-        content = content.replace(`{:button/help:}`, `<button class='btn btn-primary' style='width: 40px; height: 20px; color: black; border-color: black;' type='button' onclick='window.parent.client.runScript("help");'>[HELP]</button>`)
-        return content
-      }
-
-    </script>
-
-
   </head>
-  <body class="flex items-start justify-center h-full ">
-    <div class="flex items-center justify-center w-full h-full max-w-full">
-      <div id='content' class="w-full h-full mt-10 markdown-body"></div>
+  <body class="flex items-start justify-center h-full">
+    <div class="flex items-center justify-center w-full h-full max-w-full"  x-data="appState">
+      <div id='content' x-html="html" x-data="createContent()"  class="w-full h-full mt-10 markdown-body">
 
+      </div>
     </div>
-    <script async type="module">
-      import insane from 'https://cdn.jsdelivr.net/npm/insane@2.6.2/+esm'
-      window.content =''
-      const boot = async () =>
-      {
-
-    }
-      await boot()
-
-  </script>
 
   </body>
 </html>

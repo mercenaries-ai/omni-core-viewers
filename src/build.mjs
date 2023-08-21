@@ -13,4 +13,10 @@ await esbuild.build({
     plugins: [sassPlugin({
         type: 'css',
     })],
-}).catch(() => process.exit(1))
+}).catch((ex) =>
+{
+    console.error(ex)
+    process.exit(1)
+}).then(() =>
+console.log("Build complete")
+)
