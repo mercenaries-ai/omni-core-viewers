@@ -3,6 +3,7 @@ import './style.scss';
 
 
 import {MarkdownEngine} from './MarkdownEngine';
+import { debug } from 'console';
 
 declare global {
   interface Window {
@@ -43,9 +44,10 @@ const  parseContent = async ()=>
   if (params)
   {
     let rawText = ''
-    if (params.url)
+    if (params.url || params.file)
     {
-        let x = await fetch(params.url)
+
+        let x = await fetch(params.url || params.file)
         rawText = await x.text()
     }
     else if (params.data)
@@ -105,10 +107,8 @@ window.Alpine = Alpine;
 window.Alpine = Alpine;
 
 document.addEventListener('alpine:init', async () => {
-  const html = await parseContent()
   Alpine.data('appState', () => ({
     copyToClipboardComponent,
-    html,
   }));
 
 

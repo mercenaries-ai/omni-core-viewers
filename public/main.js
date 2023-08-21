@@ -10964,8 +10964,8 @@ var parseContent = async () => {
   const params2 = JSON.parse(args2.get("q"));
   if (params2) {
     let rawText = "";
-    if (params2.url) {
-      let x = await fetch(params2.url);
+    if (params2.url || params2.file) {
+      let x = await fetch(params2.url || params2.file);
       rawText = await x.text();
     } else if (params2.data) {
       rawText = params2.data;
@@ -10998,10 +10998,8 @@ var copyToClipboardComponent = () => {
 window.Alpine = module_default;
 window.Alpine = module_default;
 document.addEventListener("alpine:init", async () => {
-  const html = await parseContent();
   module_default.data("appState", () => ({
-    copyToClipboardComponent,
-    html
+    copyToClipboardComponent
   }));
 });
 var markdownEngine = new MarkdownEngine();
