@@ -1,6 +1,10 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 @import './fonts';
 @import './vars';
+@import './markdown.scss';
 @keyframes bounce {
   0%, 20%, 50%, 80%, 100% {
     transform: translateY(0);
