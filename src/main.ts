@@ -114,7 +114,7 @@ const  parseContent = async ()=>
 }
 
 const sendToChat = async (img) => {
-  debugger;
+
   if (Array.isArray(img)) {
 
     let obj = {}
