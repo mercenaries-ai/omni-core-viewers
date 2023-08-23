@@ -5,11 +5,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="main.css" rel="stylesheet" />
     <style>
       .markdown-body {
         box-sizing: border-box;
         min-width: 200px;
-        max-width: 980px;
+        max-width: 1600px;
         margin: 0 auto;
         padding: 45px;
       }
@@ -19,17 +20,30 @@
           padding: 15px;
         }
       }
+
+      @media print {
+      header, footer, aside, form, #toolbar {
+        display: none;
+      }
+      .markdown-body {
+        width:100%!important;
+        padding:5px 5px 5px 5px!important;
+        margin:10px 10px 10px 10px!important;
+      }
+    }
+
     </style>
     <script src="./main.js" type="module" defer></script>
-
-    <link href="main.css" rel="stylesheet">
-
-
 
 
   </head>
   <body class="flex items-start justify-center h-full">
-    <div class="flex items-center justify-center w-full h-full max-w-full"  x-data="appState">
+    <div class="flex items-center justify-center w-full h-full max-w-full rounded-md"  x-data="appState">
+      <div x-show="showToolbar" id="toolbar">
+        <button type="button" style="cursor:pointer;" @click="window.print();">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer cursor-pointer"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        </button>
+      </div>
       <div id='content' x-html="html" x-data="createContent()"  class="w-full h-full mt-10 markdown-body">
 
       </div>

@@ -62,11 +62,8 @@ class MarkdownEngine {
 
 
 
-
-
     async render(markdownContent: string): Promise<string> {
         const { content, data } = await this.preprocessData(markdownContent);
-
         const replacedContent = this.handlebars.compile(content)(data);
         return marked.parse(replacedContent);
     }

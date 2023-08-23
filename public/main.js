@@ -10610,8 +10610,8 @@ var Marked = class {
   use(...args2) {
     const extensions = this.defaults.extensions || { renderers: {}, childTokens: {} };
     args2.forEach((pack) => {
-      const opts = { ...pack };
-      opts.async = this.defaults.async || opts.async || false;
+      const opts2 = { ...pack };
+      opts2.async = this.defaults.async || opts2.async || false;
       if (pack.extensions) {
         pack.extensions.forEach((ext) => {
           if (!ext.name) {
@@ -10660,7 +10660,7 @@ var Marked = class {
             extensions.childTokens[ext.name] = ext.childTokens;
           }
         });
-        opts.extensions = extensions;
+        opts2.extensions = extensions;
       }
       if (pack.renderer) {
         const renderer = this.defaults.renderer || new _Renderer(this.defaults);
@@ -10676,7 +10676,7 @@ var Marked = class {
             return ret || "";
           };
         }
-        opts.renderer = renderer;
+        opts2.renderer = renderer;
       }
       if (pack.tokenizer) {
         const tokenizer = this.defaults.tokenizer || new _Tokenizer(this.defaults);
@@ -10692,7 +10692,7 @@ var Marked = class {
             return ret;
           };
         }
-        opts.tokenizer = tokenizer;
+        opts2.tokenizer = tokenizer;
       }
       if (pack.hooks) {
         const hooks = this.defaults.hooks || new _Hooks();
@@ -10720,11 +10720,11 @@ var Marked = class {
             };
           }
         }
-        opts.hooks = hooks;
+        opts2.hooks = hooks;
       }
       if (pack.walkTokens) {
         const walkTokens2 = this.defaults.walkTokens;
-        opts.walkTokens = function(token) {
+        opts2.walkTokens = function(token) {
           let values = [];
           values.push(pack.walkTokens.call(this, token));
           if (walkTokens2) {
@@ -10733,7 +10733,7 @@ var Marked = class {
           return values;
         };
       }
-      this.defaults = { ...this.defaults, ...opts };
+      this.defaults = { ...this.defaults, ...opts2 };
     });
     return this;
   }
@@ -10959,6 +10959,8 @@ var MarkdownEngine = class {
 // main.ts
 var args = new URLSearchParams(location.search);
 var params = JSON.parse(args.get("q"));
+var opts = JSON.parse(args.get("o") || "{}");
+var showToolbar = !opts.hideToolbar;
 var parseContent = async () => {
   const args2 = new URLSearchParams(location.search);
   const params2 = JSON.parse(args2.get("q"));
@@ -11046,6 +11048,7 @@ document.addEventListener(
     module_default.data("appState", () => ({
       copyToClipboardComponent,
       createContent,
+      showToolbar,
       blocks
     }));
   }

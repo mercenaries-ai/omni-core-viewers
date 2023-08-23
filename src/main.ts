@@ -1,10 +1,8 @@
 import Alpine from 'alpinejs';
 import './style.scss';
 
-
-
 import {MarkdownEngine} from './MarkdownEngine';
-import { debug } from 'console';
+
 
 declare global {
   interface Window {
@@ -15,6 +13,8 @@ declare global {
 // -------------------- Viewer Mode: If q.focusedItem is set, we hide the gallery and show the item full screen -----------------------
 const args = new URLSearchParams(location.search);
 const params = JSON.parse(args.get('q'));
+const opts = JSON.parse(args.get('o')|| "{}" );
+const showToolbar = !opts.hideToolbar;
 
 
 const runExtensionScript = async (scriptName: string, payload: any) => {
@@ -131,6 +131,9 @@ markdownEngine.registerToken('BUTTON', function(text: string, action: string, op
 });
 
 
+
+
+
 const blocks = {}
 
 markdownEngine.registerToken('BLOCK', function(token, options) {
@@ -186,6 +189,7 @@ document.addEventListener('alpine:init', async () => {
   Alpine.data('appState', () => ({
     copyToClipboardComponent,
     createContent,
+    showToolbar,
     blocks: blocks
   }
   ))
