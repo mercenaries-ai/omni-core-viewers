@@ -1116,7 +1116,7 @@ var require_no_conflict = __commonJS({
   "node_modules/handlebars/dist/cjs/handlebars/no-conflict.js"(exports, module) {
     "use strict";
     exports.__esModule = true;
-    exports["default"] = function(Handlebars2) {
+    exports["default"] = function(Handlebars3) {
       (function() {
         if (typeof globalThis === "object")
           return;
@@ -1127,11 +1127,11 @@ var require_no_conflict = __commonJS({
         delete Object.prototype.__magic__;
       })();
       var $Handlebars = globalThis.Handlebars;
-      Handlebars2.noConflict = function() {
-        if (globalThis.Handlebars === Handlebars2) {
+      Handlebars3.noConflict = function() {
+        if (globalThis.Handlebars === Handlebars3) {
           globalThis.Handlebars = $Handlebars;
         }
-        return Handlebars2;
+        return Handlebars3;
       };
     };
     module.exports = exports["default"];
@@ -5731,6 +5731,9 @@ var require_handlebars = __commonJS({
     module.exports = exports["default"];
   }
 });
+
+// main.ts
+var import_handlebars2 = __toESM(require_handlebars());
 
 // node_modules/alpinejs/dist/module.esm.js
 var flushPending = false;
@@ -10910,6 +10913,11 @@ var parser = _Parser.parse;
 var lexer = _Lexer.lex;
 
 // MarkdownEngine.ts
+var mdRenderer = new marked.Renderer();
+mdRenderer.link = function(href, title, text) {
+  const link = marked.Renderer.prototype.link.apply(this, arguments);
+  return link.replace("<a", "<a target='_blank'");
+};
 var MarkdownEngine = class {
   constructor() {
     this.asyncResolvers = {};
@@ -10950,9 +10958,12 @@ var MarkdownEngine = class {
     return { content: processedContent, data: data3 };
   }
   async render(markdownContent) {
-    const { content, data: data3 } = await this.preprocessData(markdownContent);
+    debugger;
+    const md = marked.parse(markdownContent, { renderer: mdRenderer });
+    const { content, data: data3 } = await this.preprocessData(md);
     const replacedContent = this.handlebars.compile(content)(data3);
-    return marked.parse(replacedContent);
+    const ret = replacedContent;
+    return ret;
   }
 };
 
@@ -11002,7 +11013,6 @@ var parseContent = async () => {
   return "";
 };
 var sendToChat = async (img) => {
-  debugger;
   if (Array.isArray(img)) {
     let obj = {};
     img.forEach((o) => {
@@ -11071,7 +11081,10 @@ markdownEngine.registerAsyncResolver("BLOCK", async (token) => {
   return await window.parent.client.blocks.getInstance(token);
 });
 markdownEngine.registerToken("BUTTON", function(text, action, options2) {
-  return `<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}">${text}</button>`;
+  return new import_handlebars2.default.SafeString(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}"  @click="run_button(this)">${text}</button>`);
+});
+markdownEngine.registerToken("START_BUTTON", function(text, action, options2) {
+  return new import_handlebars2.default.SafeString(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}"  @click="window.parent.client.runScript('run')">Start!</button>`);
 });
 var blocks = {};
 markdownEngine.registerToken("BLOCK", function(token, options2) {
@@ -11099,9 +11112,14 @@ var createContent = function() {
   return {
     html: "",
     async init() {
-      this.html = markdownEngine.render(await parseContent());
+      if (this.html.length == 0) {
+        this.html = markdownEngine.render(await parseContent());
+      }
     }
   };
+};
+var run_button = function(button) {
+  alert("ya");
 };
 window.Alpine = module_default;
 document.addEventListener(
@@ -11111,6 +11129,7 @@ document.addEventListener(
       copyToClipboardComponent,
       createContent,
       sendToChat,
+      run_button,
       data: data2,
       showToolbar,
       blocks

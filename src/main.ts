@@ -1,3 +1,4 @@
+import Handlebars, { HelperDelegate } from 'handlebars';
 import Alpine from 'alpinejs';
 import './style.scss';
 
@@ -222,7 +223,11 @@ markdownEngine.registerAsyncResolver("BLOCK", async (token) => {
 });
 
 markdownEngine.registerToken('BUTTON', function(text: string, action: string, options: any) {
-  return `<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}">${text}</button>`;
+  return new Handlebars.SafeString(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}"  @click="run_button(this)">${text}</button>`)
+});
+
+markdownEngine.registerToken('START_BUTTON', function(text: string, action: string, options: any) {
+  return new Handlebars.SafeString(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}"  @click="window.parent.client.runScript('run')">Start!</button>`)
 });
 
 
@@ -274,9 +279,17 @@ const createContent = function () {
     html: '',
     async init()
     {
-     this.html = markdownEngine.render(await parseContent())
+      if (this.html.length == 0)
+      {
+        this.html = markdownEngine.render(await parseContent())
+      }
     }
   }
+}
+
+const run_button = function(button)
+{
+  alert("ya")
 }
 
 window.Alpine = Alpine
@@ -285,6 +298,7 @@ document.addEventListener('alpine:init', async () => {
     copyToClipboardComponent,
     createContent,
     sendToChat,
+    run_button,
     data,
     showToolbar,
     blocks: blocks

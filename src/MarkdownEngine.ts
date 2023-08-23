@@ -3,6 +3,12 @@ import {marked} from 'marked';
 import insane from './insane.min.mjs'
 
 
+const mdRenderer = new marked.Renderer();
+mdRenderer.link = function(href, title, text) {
+        const link = marked.Renderer.prototype.link.apply(this, arguments);
+        return link.replace("<a","<a target='_blank'");
+    };
+
 class MarkdownEngine {
     handlebars: typeof Handlebars
     private asyncResolvers: { [directive: string]: (token: string) => Promise<any> } = {};
@@ -62,10 +68,17 @@ class MarkdownEngine {
 
 
 
+
+
     async render(markdownContent: string): Promise<string> {
-        const { content, data } = await this.preprocessData(markdownContent);
+
+        debugger;
+        const md = marked.parse(markdownContent,{renderer:mdRenderer})
+        const { content, data } = await this.preprocessData(md);
         const replacedContent = this.handlebars.compile(content)(data);
-        return marked.parse(replacedContent);
+
+        const ret  =replacedContent
+        return ret
     }
 
 }
