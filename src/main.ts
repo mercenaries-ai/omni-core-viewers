@@ -16,6 +16,32 @@ const params = JSON.parse(args.get('q'));
 const opts = JSON.parse(args.get('o')|| "{}" );
 const showToolbar = !opts.hideToolbar;
 
+class OmniResourceWrapper
+{
+
+  static isPlaceholder(obj:any)
+  {
+    return obj?.onclick != null
+  }
+
+  static isAudio(obj:any)
+  {
+    return obj && !OmniResourceWrapper.isPlaceholder(obj) && obj?.mimeType?.startsWith('audio/') || obj.mimeType == 'application/ogg'
+  }
+
+  static isImage(obj:any)
+  {
+    return obj && !OmniResourceWrapper.isPlaceholder(obj) &&  obj?.mimeType?.startsWith('image/')
+  }
+
+  static isDocument(obj:any)
+  {
+    return obj && !OmniResourceWrapper.isPlaceholder(obj) &&  (obj?.mimeType?.startsWith('text/') || obj?.mimeType?.startsWith('application/pdf'))
+  }
+
+
+}
+
 
 const runExtensionScript = async (scriptName: string, payload: any) => {
   const response = await fetch(
@@ -35,7 +61,9 @@ const runExtensionScript = async (scriptName: string, payload: any) => {
 };
 
 
-
+let data = Alpine.reactive({
+  file: null,
+})
 const  parseContent = async ()=>
 {
 
@@ -45,10 +73,15 @@ const  parseContent = async ()=>
   if (params)
   {
     let rawText = ''
-    if (params.url || params.file)
+    if (params.file && params.file.fid)
     {
-
-        let x = await fetch(params.url || params.file)
+      data.file = params.file
+      let x = await fetch('/fid/'+params.file.fid)
+      rawText = await x.text()
+    }
+    else if (params.url)
+    {
+        let x = await fetch(params.url)
         rawText = await x.text()
     }
     else if (params.data)
@@ -79,6 +112,68 @@ const  parseContent = async ()=>
 
   return ''
 }
+
+const sendToChat = async (img) => {
+  debugger;
+  if (Array.isArray(img)) {
+
+    let obj = {}
+
+    img.forEach(o => {
+
+      let type
+      if (OmniResourceWrapper.isAudio(o))
+      {
+        type='audio'
+      }
+      else if (OmniResourceWrapper.isImage(o))
+      {
+        type = 'images'
+      }
+      else if (OmniResourceWrapper.isDocument(o))
+      {
+        type = 'documents'
+      }
+        obj[type] ??=[]
+        obj[type].push(o)
+    })
+
+
+    //@ts-expect-error
+    window.parent.client.sendSystemMessage(``, 'text/markdown', {
+      ...obj, commands: [
+        { 'id': 'run', title: '🞂 Run', args: [null, img] }]
+    }, ['no-picture'])
+
+  }
+  else {
+
+  let type
+
+  if (OmniResourceWrapper.isAudio(img))
+  {
+    type = 'audio'
+  }
+  else if (OmniResourceWrapper.isImage(img))
+  {
+    type = 'images'
+  }
+  else if (OmniResourceWrapper.isDocument(img))
+  {
+    type = 'documents'
+
+  }
+    let obj = {}
+    obj[type] =  [{ ...img }]
+
+    //@ts-expect-error
+    window.parent.client.sendSystemMessage(``, 'text/markdown', {
+      ...obj, commands: [
+        { 'id': 'run', title: '🞂 Run', args: [null, { ...img }] }]
+    }, ['no-picture'])
+  }
+}
+
 
 
 
@@ -189,6 +284,8 @@ document.addEventListener('alpine:init', async () => {
   Alpine.data('appState', () => ({
     copyToClipboardComponent,
     createContent,
+    sendToChat,
+    data,
     showToolbar,
     blocks: blocks
   }

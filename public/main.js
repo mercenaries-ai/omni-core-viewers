@@ -214,9 +214,9 @@ var require_block_helper_missing = __commonJS({
           }
         } else {
           if (options2.data && options2.ids) {
-            var data2 = _utils.createFrame(options2.data);
-            data2.contextPath = _utils.appendContextPath(options2.data.contextPath, options2.name);
-            options2 = { data: data2 };
+            var data3 = _utils.createFrame(options2.data);
+            data3.contextPath = _utils.appendContextPath(options2.data.contextPath, options2.name);
+            options2 = { data: data3 };
           }
           return fn(context, options2);
         }
@@ -242,7 +242,7 @@ var require_each = __commonJS({
         if (!options2) {
           throw new _exception2["default"]("Must pass iterator to #each");
         }
-        var fn = options2.fn, inverse = options2.inverse, i = 0, ret = "", data2 = void 0, contextPath = void 0;
+        var fn = options2.fn, inverse = options2.inverse, i = 0, ret = "", data3 = void 0, contextPath = void 0;
         if (options2.data && options2.ids) {
           contextPath = _utils.appendContextPath(options2.data.contextPath, options2.ids[0]) + ".";
         }
@@ -250,20 +250,20 @@ var require_each = __commonJS({
           context = context.call(this);
         }
         if (options2.data) {
-          data2 = _utils.createFrame(options2.data);
+          data3 = _utils.createFrame(options2.data);
         }
         function execIteration(field, index, last) {
-          if (data2) {
-            data2.key = field;
-            data2.index = index;
-            data2.first = index === 0;
-            data2.last = !!last;
+          if (data3) {
+            data3.key = field;
+            data3.index = index;
+            data3.first = index === 0;
+            data3.last = !!last;
             if (contextPath) {
-              data2.contextPath = contextPath + field;
+              data3.contextPath = contextPath + field;
             }
           }
           ret = ret + fn(context[field], {
-            data: data2,
+            data: data3,
             blockParams: _utils.blockParams([context[field], field], [contextPath + field, null])
           });
         }
@@ -436,14 +436,14 @@ var require_with = __commonJS({
         }
         var fn = options2.fn;
         if (!_utils.isEmpty(context)) {
-          var data2 = options2.data;
+          var data3 = options2.data;
           if (options2.data && options2.ids) {
-            data2 = _utils.createFrame(options2.data);
-            data2.contextPath = _utils.appendContextPath(options2.data.contextPath, options2.ids[0]);
+            data3 = _utils.createFrame(options2.data);
+            data3.contextPath = _utils.appendContextPath(options2.data.contextPath, options2.ids[0]);
           }
           return fn(context, {
-            data: data2,
-            blockParams: _utils.blockParams([context], [data2 && data2.contextPath])
+            data: data3,
+            blockParams: _utils.blockParams([context], [data3 && data3.contextPath])
           });
         } else {
           return options2.inverse(this);
@@ -935,16 +935,16 @@ var require_runtime = __commonJS({
           return ret2;
         },
         programs: [],
-        program: function program(i, data2, declaredBlockParams, blockParams, depths) {
+        program: function program(i, data3, declaredBlockParams, blockParams, depths) {
           var programWrapper = this.programs[i], fn = this.fn(i);
-          if (data2 || depths || blockParams || declaredBlockParams) {
-            programWrapper = wrapProgram(this, i, fn, data2, declaredBlockParams, blockParams, depths);
+          if (data3 || depths || blockParams || declaredBlockParams) {
+            programWrapper = wrapProgram(this, i, fn, data3, declaredBlockParams, blockParams, depths);
           } else if (!programWrapper) {
             programWrapper = this.programs[i] = wrapProgram(this, i, fn);
           }
           return programWrapper;
         },
-        data: function data2(value, depth) {
+        data: function data3(value, depth) {
           while (value && depth--) {
             value = value._parent;
           }
@@ -964,10 +964,10 @@ var require_runtime = __commonJS({
       };
       function ret(context) {
         var options2 = arguments.length <= 1 || arguments[1] === void 0 ? {} : arguments[1];
-        var data2 = options2.data;
+        var data3 = options2.data;
         ret._setup(options2);
         if (!options2.partial && templateSpec.useData) {
-          data2 = initData(context, data2);
+          data3 = initData(context, data3);
         }
         var depths = void 0, blockParams = templateSpec.useBlockParams ? [] : void 0;
         if (templateSpec.useDepths) {
@@ -978,9 +978,9 @@ var require_runtime = __commonJS({
           }
         }
         function main(context2) {
-          return "" + templateSpec.main(container, context2, container.helpers, container.partials, data2, blockParams, depths);
+          return "" + templateSpec.main(container, context2, container.helpers, container.partials, data3, blockParams, depths);
         }
-        main = executeDecorators(templateSpec.main, main, container, options2.depths || [], data2, blockParams);
+        main = executeDecorators(templateSpec.main, main, container, options2.depths || [], data3, blockParams);
         return main(context, options2);
       }
       ret.isTop = true;
@@ -1008,27 +1008,27 @@ var require_runtime = __commonJS({
           container.hooks = options2.hooks;
         }
       };
-      ret._child = function(i, data2, blockParams, depths) {
+      ret._child = function(i, data3, blockParams, depths) {
         if (templateSpec.useBlockParams && !blockParams) {
           throw new _exception2["default"]("must pass block params");
         }
         if (templateSpec.useDepths && !depths) {
           throw new _exception2["default"]("must pass parent depths");
         }
-        return wrapProgram(container, i, templateSpec[i], data2, 0, blockParams, depths);
+        return wrapProgram(container, i, templateSpec[i], data3, 0, blockParams, depths);
       };
       return ret;
     }
-    function wrapProgram(container, i, fn, data2, declaredBlockParams, blockParams, depths) {
+    function wrapProgram(container, i, fn, data3, declaredBlockParams, blockParams, depths) {
       function prog(context) {
         var options2 = arguments.length <= 1 || arguments[1] === void 0 ? {} : arguments[1];
         var currentDepths = depths;
         if (depths && context != depths[0] && !(context === container.nullContext && depths[0] === null)) {
           currentDepths = [context].concat(depths);
         }
-        return fn(container, context, container.helpers, container.partials, options2.data || data2, blockParams && [options2.blockParams].concat(blockParams), currentDepths);
+        return fn(container, context, container.helpers, container.partials, options2.data || data3, blockParams && [options2.blockParams].concat(blockParams), currentDepths);
       }
-      prog = executeDecorators(fn, prog, container, depths, data2, blockParams);
+      prog = executeDecorators(fn, prog, container, depths, data3, blockParams);
       prog.program = i;
       prog.depth = depths ? depths.length : 0;
       prog.blockParams = declaredBlockParams || 0;
@@ -1081,17 +1081,17 @@ var require_runtime = __commonJS({
     function noop() {
       return "";
     }
-    function initData(context, data2) {
-      if (!data2 || !("root" in data2)) {
-        data2 = data2 ? _base.createFrame(data2) : {};
-        data2.root = context;
+    function initData(context, data3) {
+      if (!data3 || !("root" in data3)) {
+        data3 = data3 ? _base.createFrame(data3) : {};
+        data3.root = context;
       }
-      return data2;
+      return data3;
     }
-    function executeDecorators(fn, prog, container, depths, data2, blockParams) {
+    function executeDecorators(fn, prog, container, depths, data3, blockParams) {
       if (fn.decorator) {
         var props = {};
-        prog = fn.decorator(prog, props, container, depths && depths[0], data2, blockParams, depths);
+        prog = fn.decorator(prog, props, container, depths && depths[0], data3, blockParams, depths);
         Utils.extend(prog, props);
       }
       return prog;
@@ -2274,9 +2274,9 @@ var require_helpers2 = __commonJS({
     function stripComment(comment) {
       return comment.replace(/^\{\{~?!-?-?/, "").replace(/-?-?~?\}\}$/, "");
     }
-    function preparePath(data2, parts, loc) {
+    function preparePath(data3, parts, loc) {
       loc = this.locInfo(loc);
-      var original = data2 ? "@" : "", dig = [], depth = 0;
+      var original = data3 ? "@" : "", dig = [], depth = 0;
       for (var i = 0, l = parts.length; i < l; i++) {
         var part = parts[i].part, isLiteral = parts[i].original !== part;
         original += (parts[i].separator || "") + part;
@@ -2292,7 +2292,7 @@ var require_helpers2 = __commonJS({
       }
       return {
         type: "PathExpression",
-        data: data2,
+        data: data3,
         depth,
         parts: dig,
         original,
@@ -2848,11 +2848,11 @@ var require_compiler = __commonJS({
         }
         return compiled._setup(setupOptions);
       };
-      ret._child = function(i, data2, blockParams, depths) {
+      ret._child = function(i, data3, blockParams, depths) {
         if (!compiled) {
           compiled = compileInput();
         }
-        return compiled._child(i, data2, blockParams, depths);
+        return compiled._child(i, data3, blockParams, depths);
       };
       return ret;
     }
@@ -5979,10 +5979,10 @@ function onMutate(mutations) {
 function scope(node) {
   return mergeProxies(closestDataStack(node));
 }
-function addScopeToNode(node, data2, referenceNode) {
-  node._x_dataStack = [data2, ...closestDataStack(referenceNode || node)];
+function addScopeToNode(node, data22, referenceNode) {
+  node._x_dataStack = [data22, ...closestDataStack(referenceNode || node)];
   return () => {
-    node._x_dataStack = node._x_dataStack.filter((i) => i !== data2);
+    node._x_dataStack = node._x_dataStack.filter((i) => i !== data22);
   };
 }
 function closestDataStack(node) {
@@ -6044,7 +6044,7 @@ function mergeProxies(objects) {
   });
   return thisProxy;
 }
-function initInterceptors(data2) {
+function initInterceptors(data22) {
   let isObject2 = (val) => typeof val === "object" && !Array.isArray(val) && val !== null;
   let recurse = (obj, basePath = "") => {
     Object.entries(Object.getOwnPropertyDescriptors(obj)).forEach(([key, { value, enumerable }]) => {
@@ -6052,7 +6052,7 @@ function initInterceptors(data2) {
         return;
       let path = basePath === "" ? key : `${basePath}.${key}`;
       if (typeof value === "object" && value !== null && value._x_interceptor) {
-        obj[key] = value.initialize(data2, path, key);
+        obj[key] = value.initialize(data22, path, key);
       } else {
         if (isObject2(value) && value !== obj && !(value instanceof Element)) {
           recurse(value, path);
@@ -6060,25 +6060,25 @@ function initInterceptors(data2) {
       }
     });
   };
-  return recurse(data2);
+  return recurse(data22);
 }
 function interceptor(callback, mutateObj = () => {
 }) {
   let obj = {
     initialValue: void 0,
     _x_interceptor: true,
-    initialize(data2, path, key) {
-      return callback(this.initialValue, () => get(data2, path), (value) => set(data2, path, value), path, key);
+    initialize(data22, path, key) {
+      return callback(this.initialValue, () => get(data22, path), (value) => set(data22, path, value), path, key);
     }
   };
   mutateObj(obj);
   return (initialValue) => {
     if (typeof initialValue === "object" && initialValue !== null && initialValue._x_interceptor) {
       let initialize = obj.initialize.bind(obj);
-      obj.initialize = (data2, path, key) => {
-        let innerValue = initialValue.initialize(data2, path, key);
+      obj.initialize = (data22, path, key) => {
+        let innerValue = initialValue.initialize(data22, path, key);
         obj.initialValue = innerValue;
-        return initialize(data2, path, key);
+        return initialize(data22, path, key);
       };
     } else {
       obj.initialValue = initialValue;
@@ -8421,11 +8421,11 @@ directive("data", skipDuringClone((el, { expression }, { cleanup: cleanup2 }) =>
   injectMagics(magicContext, el);
   let dataProviderContext = {};
   injectDataProviders(dataProviderContext, magicContext);
-  let data2 = evaluate(el, expression, { scope: dataProviderContext });
-  if (data2 === void 0 || data2 === true)
-    data2 = {};
-  injectMagics(data2, el);
-  let reactiveData = reactive(data2);
+  let data22 = evaluate(el, expression, { scope: dataProviderContext });
+  if (data22 === void 0 || data22 === true)
+    data22 = {};
+  injectMagics(data22, el);
+  let reactiveData = reactive(data22);
   initInterceptors(reactiveData);
   let undo = addScopeToNode(el, reactiveData);
   reactiveData["init"] && evaluate(el, reactiveData["init"]);
@@ -10939,19 +10939,19 @@ var MarkdownEngine = class {
   }
   async preprocessData(markdownContent) {
     let processedContent = markdownContent;
-    let data2 = {};
+    let data3 = {};
     let match;
     for (const match2 of markdownContent.matchAll(this.directiveRegex)) {
       const directive2 = match2[1];
       const token = match2[2];
       const tokenData = await this.getAsyncDataForDirective(directive2, token);
-      data2[token] = tokenData;
+      data3[token] = tokenData;
     }
-    return { content: processedContent, data: data2 };
+    return { content: processedContent, data: data3 };
   }
   async render(markdownContent) {
-    const { content, data: data2 } = await this.preprocessData(markdownContent);
-    const replacedContent = this.handlebars.compile(content)(data2);
+    const { content, data: data3 } = await this.preprocessData(markdownContent);
+    const replacedContent = this.handlebars.compile(content)(data3);
     return marked.parse(replacedContent);
   }
 };
@@ -10961,13 +10961,34 @@ var args = new URLSearchParams(location.search);
 var params = JSON.parse(args.get("q"));
 var opts = JSON.parse(args.get("o") || "{}");
 var showToolbar = !opts.hideToolbar;
+var OmniResourceWrapper = class _OmniResourceWrapper {
+  static isPlaceholder(obj) {
+    return obj?.onclick != null;
+  }
+  static isAudio(obj) {
+    return obj && !_OmniResourceWrapper.isPlaceholder(obj) && obj?.mimeType?.startsWith("audio/") || obj.mimeType == "application/ogg";
+  }
+  static isImage(obj) {
+    return obj && !_OmniResourceWrapper.isPlaceholder(obj) && obj?.mimeType?.startsWith("image/");
+  }
+  static isDocument(obj) {
+    return obj && !_OmniResourceWrapper.isPlaceholder(obj) && (obj?.mimeType?.startsWith("text/") || obj?.mimeType?.startsWith("application/pdf"));
+  }
+};
+var data2 = module_default.reactive({
+  file: null
+});
 var parseContent = async () => {
   const args2 = new URLSearchParams(location.search);
   const params2 = JSON.parse(args2.get("q"));
   if (params2) {
     let rawText = "";
-    if (params2.url || params2.file) {
-      let x = await fetch(params2.url || params2.file);
+    if (params2.file && params2.file.fid) {
+      data2.file = params2.file;
+      let x = await fetch("/fid/" + params2.file.fid);
+      rawText = await x.text();
+    } else if (params2.url) {
+      let x = await fetch(params2.url);
       rawText = await x.text();
     } else if (params2.data) {
       rawText = params2.data;
@@ -10980,6 +11001,47 @@ var parseContent = async () => {
   }
   return "";
 };
+var sendToChat = async (img) => {
+  debugger;
+  if (Array.isArray(img)) {
+    let obj = {};
+    img.forEach((o) => {
+      let type;
+      if (OmniResourceWrapper.isAudio(o)) {
+        type = "audio";
+      } else if (OmniResourceWrapper.isImage(o)) {
+        type = "images";
+      } else if (OmniResourceWrapper.isDocument(o)) {
+        type = "documents";
+      }
+      obj[type] ?? (obj[type] = []);
+      obj[type].push(o);
+    });
+    window.parent.client.sendSystemMessage(``, "text/markdown", {
+      ...obj,
+      commands: [
+        { "id": "run", title: "\u{1F782} Run", args: [null, img] }
+      ]
+    }, ["no-picture"]);
+  } else {
+    let type;
+    if (OmniResourceWrapper.isAudio(img)) {
+      type = "audio";
+    } else if (OmniResourceWrapper.isImage(img)) {
+      type = "images";
+    } else if (OmniResourceWrapper.isDocument(img)) {
+      type = "documents";
+    }
+    let obj = {};
+    obj[type] = [{ ...img }];
+    window.parent.client.sendSystemMessage(``, "text/markdown", {
+      ...obj,
+      commands: [
+        { "id": "run", title: "\u{1F782} Run", args: [null, { ...img }] }
+      ]
+    }, ["no-picture"]);
+  }
+};
 var copyToClipboardComponent = () => {
   return {
     copyText: "",
@@ -10987,8 +11049,8 @@ var copyToClipboardComponent = () => {
     async copyToClipboard(item) {
       const res = await fetch(item.url);
       const blob = await res.blob();
-      const data2 = [new ClipboardItem({ [blob.type]: blob })];
-      await navigator.clipboard.write(data2);
+      const data3 = [new ClipboardItem({ [blob.type]: blob })];
+      await navigator.clipboard.write(data3);
       this.copyNotification = true;
       let that = this;
       setTimeout(function() {
@@ -11048,6 +11110,8 @@ document.addEventListener(
     module_default.data("appState", () => ({
       copyToClipboardComponent,
       createContent,
+      sendToChat,
+      data: data2,
       showToolbar,
       blocks
     }));
