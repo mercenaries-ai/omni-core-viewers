@@ -1,21 +1,17 @@
 import Handlebars, { HelperDelegate } from 'handlebars';
-import {marked} from 'marked';
-import insane from './insane.min.mjs'
-
+import { marked } from 'marked';
 
 const mdRenderer = new marked.Renderer();
 mdRenderer.link = function(href, title, text) {
-        const link = marked.Renderer.prototype.link.apply(this, arguments);
-        return link.replace("<a","<a target='_blank'");
-    };
+    const link = marked.Renderer.prototype.link.apply(this, arguments as any);
+    return link.replace("<a", "<a target='_blank'");
+};
 
 class MarkdownEngine {
-    handlebars: typeof Handlebars
+    handlebars: typeof Handlebars;
     private asyncResolvers: { [directive: string]: (token: string) => Promise<any> } = {};
 
-
     constructor() {
-        // Initialize Handlebars
         this.handlebars = Handlebars.create();
     }
 
@@ -23,17 +19,6 @@ class MarkdownEngine {
         this.asyncResolvers[directive] = resolverFunction;
     }
 
-    get directiveRegex(): RegExp {
-        const directives = Object.keys(this.asyncResolvers).join('|');
-        return new RegExp(`{{(${directives}) "(.+?)"}}`, 'g');
-    }
-
-
-    /**
-     * Register a custom token and its resolver.
-     * @param tokenName - The name of the token (e.g. "BUTTON")
-     * @param resolver - The function that resolves the token to HTML
-     */
     registerToken(tokenName: string, resolver: HelperDelegate) {
         this.handlebars.registerHelper(tokenName, resolver);
     }
@@ -46,42 +31,75 @@ class MarkdownEngine {
         return await resolver(token);
     }
 
-    async preprocessData(markdownContent: string): Promise<{ content: string, data: any }> {
-        let processedContent = markdownContent;
-        let data: any = {};
+    extractDirectiveData(statement: any): { name?: string, param?: string } {
+      if (statement.type === 'MustacheStatement' || statement.type === 'BlockStatement') {
+          const name = statement.path?.original;
+          const param = statement.params?.[0]?.original;
 
-        let match;
-        for (const match of markdownContent.matchAll(this.directiveRegex)) {
-            const directive = match[1];
-            const token = match[2];
+          return {
+              name,
+              param
+          };
+      }
 
-
-            // Fetch data for the directive & token asynchronously
-            const tokenData = await this.getAsyncDataForDirective(directive, token);
-            data[token] = tokenData;
-
-            // Optionally replace the token with a placeholder or keep as is.
-        }
-
-        return { content: processedContent, data };
+      return {};
     }
 
+    async preprocessData(content: string, tokens: Map<string, string>): Promise<{ content: string, data: any }> {
+        let data: any = {};
 
+        for (const [placeholder, originalDirective] of tokens.entries()) {
+            const parsed = Handlebars.parse(originalDirective);
+            const directiveData = this.extractDirectiveData(parsed.body[0]);
+            const directive = directiveData?.name;
+            const token = directiveData?.param;
 
+            if (directive && token) {
+                /*const tokenData = await this.getAsyncDataForDirective(directive, token);
+                data[placeholder] = tokenData;*/
+                content = content.replace(placeholder, originalDirective);
+            }
+        }
 
+        return { content, data };
+    }
+
+    extractTokens(content: string): {modifiedContent: string, tokens: Map<string, string>} {
+        const tokenRegex = /{{([A-Z0-9]+)[^}]*}}/g;
+        const tokens = new Map<string, string>();
+        let match;
+
+        while ((match = tokenRegex.exec(content)) !== null) {
+            const placeholder = `TOKEN_${tokens.size + 1}`;
+            tokens.set(placeholder, match[0]);
+            content = content.replace(match[0], placeholder);
+            tokenRegex.lastIndex = 0; // Reset the regex state
+        }
+
+        return {modifiedContent: content, tokens};
+    }
+
+    injectTokens(content: string, tokens: Map<string, string>): string {
+        let processedContent = content;
+
+        tokens.forEach((value, key) => {
+            processedContent = processedContent.replace(key, value);
+        });
+
+        return processedContent;
+    }
 
     async render(markdownContent: string): Promise<string> {
 
-        debugger;
-        const md = marked.parse(markdownContent,{renderer:mdRenderer})
-        const { content, data } = await this.preprocessData(md);
+        let {modifiedContent, tokens} = this.extractTokens(markdownContent);
+
+        const md = marked.parse(modifiedContent, { renderer: mdRenderer });
+        let { content, data } = await this.preprocessData(md, tokens);
+        content = this.injectTokens(content, tokens); // Added this line to ensure we reinject before compiling
         const replacedContent = this.handlebars.compile(content)(data);
 
-        const ret  =replacedContent
-        return ret
+        return replacedContent;
     }
-
 }
 
-
-export {MarkdownEngine}
+export { MarkdownEngine };

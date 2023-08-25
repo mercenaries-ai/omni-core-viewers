@@ -16,6 +16,17 @@ const args = new URLSearchParams(location.search);
 const params = JSON.parse(args.get('q'));
 const opts = JSON.parse(args.get('o')|| "{}" );
 const showToolbar = !opts.hideToolbar;
+const recipe = params.recipe
+
+
+const resolveComponents = async ()=>
+{
+  const keys = Object.values(recipe.rete.nodes).map((node:any)=>node.name)
+  //@ts-expect-error
+  return await window.parent.client.blocks.getInstances(keys);
+}
+
+
 
 class OmniResourceWrapper
 {
@@ -64,6 +75,7 @@ const runExtensionScript = async (scriptName: string, payload: any) => {
 
 let data = Alpine.reactive({
   file: null,
+  inputs: {},
 })
 const  parseContent = async ()=>
 {
@@ -199,81 +211,80 @@ const copyToClipboardComponent = () => {
   };
 };
 
-window.Alpine = Alpine;
 
-window.Alpine = Alpine;
+const engine = new MarkdownEngine();
 
-document.addEventListener('alpine:init', async () => {
-  Alpine.data('appState', () => ({
-    copyToClipboardComponent,
-  }));
+const setup = async function()
+{
 
+  const components = await resolveComponents()
 
-});
+  engine.registerToken('BUTTON', function(title, action, argsString) {
+    // argsString would be like: "["foo", "bar", 42]"
 
-
-
-const markdownEngine = new MarkdownEngine()
-
-
-markdownEngine.registerAsyncResolver("BLOCK", async (token) => {
-  //@ts-expect-error
-  return await window.parent.client.blocks.getInstance(token)
-
-});
-
-markdownEngine.registerToken('BUTTON', function(text: string, action: string, options: any) {
-  return new Handlebars.SafeString(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}"  @click="run_button(this)">${text}</button>`)
-});
-
-markdownEngine.registerToken('START_BUTTON', function(text: string, action: string, options: any) {
-  return new Handlebars.SafeString(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}"  @click="window.parent.client.runScript('run')">Start!</button>`)
-});
+    const args = JSON.parse(argsString|| "[]");
+    const safeArgs = JSON.stringify(args).replace(/"/g, '&quot;');
+    return new Handlebars.SafeString(`<button @click="runAction('${action}', ${safeArgs})">${title}</button>`);
+  });
 
 
+  engine.registerToken('INPUT', function(index, key, title) {
+
+    const node = Object.values(recipe.rete.nodes).find((n:any)=>n.id == index) as any;
+
+    let component = components.find(c=>c.name ===node.name)
+
+    const inputDetail = component.inputs[key];
+
+
+    if (!inputDetail) {
+        return `<div>Error: Input not found.</div>`;
+    }
+    const uid = index+ ':' + key
+
+    title = title || inputDetail.title
+
+    let inputElement = '';
+    data.inputs??={}
+    data.inputs[uid] ??= node.data[key]
+    switch (inputDetail.type) {
+        case 'string':
+            inputElement = `
+            <div class="field-row flex flex-wrap w-full mb-2" x-data="{'uid': '${uid}'}">
+              <label class="w-full font-semibold" for='in_${inputDetail.name}'>${title}</label>
+              <textarea id="in_${inputDetail.name}" class="w-full" type="text" placeholder="${inputDetail.placeholder}" x-model="data.inputs[uid]" ></textarea>
+              <span class='w-full flex items-start'>
+                <span class='flex-grow'></span>
+                <small>${inputDetail.description}</small>
+              </span>
+            </div>`;
+            break;
+        // Add other types as needed
+        default:
+            inputElement = `<div>Unsupported input type: ${inputDetail.type}</div>`;
+            break;
+    }
+
+    return new Handlebars.SafeString(`
+        ${inputElement}
+    </div>
+    `);
+  });
+
+  // Sample markdown content
 
 
 
-const blocks = {}
-
-markdownEngine.registerToken('BLOCK', function(token, options) {
 
 
-  const block = this[token];
 
-  const html = []
+}
 
-
-  if (block && Object.keys(block))
-  {
-    blocks[token] = block
-  html.push(`<div> `)
-  html.push(`<div class='p-2 font-semibold text-lg'>${block.title||block.displayOperationId}</div>`)
-  if (block.description)
-  {
-    html.push(`<p class='flex-grow p-2'>${block.description}</p>`)
-  }
-  html.push(`<div style='display: flex;resize: horizontal; border: 1px solid black;'> `)
-  html.push(`<table x-data='blocks["${token}"]'>`)
-
-  //html.push(`<template x-for='(input, key) in block.inputs'><tr><td>input.title||key</td><td><input type="text" placeholder="input.placeholder||input.default}" /></td></tr>`)
-
-  html.push(`</table>
-  <div class='flex-grow p-2' x-text='__result'>Output</div>`)
-  html.push(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' @click="block.run()">Run</button>`)
-
-  html.push(`</div>`)
-
-  html.push(`</div>`)
-
-  return html.join('')
-  }
-  return `<div>Block ${token} not found</div>`
-
-});
+//
 
 
-const createContent = function () {
+
+const createContent =  function () {
 
   return  {
     html: '',
@@ -281,7 +292,11 @@ const createContent = function () {
     {
       if (this.html.length == 0)
       {
-        this.html = markdownEngine.render(await parseContent())
+
+        await setup()
+        //this.html = await engine.render(await parseContent())
+        this.html = await engine.render(recipe.meta.help)
+        // markdownEngine.render(await parseContent())
       }
     }
   }
@@ -294,6 +309,7 @@ const run_button = function(button)
 
 window.Alpine = Alpine
 document.addEventListener('alpine:init', async () => {
+
   Alpine.data('appState', () => ({
     copyToClipboardComponent,
     createContent,
@@ -301,7 +317,7 @@ document.addEventListener('alpine:init', async () => {
     run_button,
     data,
     showToolbar,
-    blocks: blocks
+
   }
   ))
 

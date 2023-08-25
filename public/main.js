@@ -5780,17 +5780,17 @@ function disableEffectScheduling(callback) {
   callback();
   shouldSchedule = true;
 }
-function setReactivityEngine(engine) {
-  reactive = engine.reactive;
-  release = engine.release;
-  effect = (callback) => engine.effect(callback, { scheduler: (task) => {
+function setReactivityEngine(engine2) {
+  reactive = engine2.reactive;
+  release = engine2.release;
+  effect = (callback) => engine2.effect(callback, { scheduler: (task) => {
     if (shouldSchedule) {
       scheduler(task);
     } else {
       task();
     }
   } });
-  raw = engine.raw;
+  raw = engine2.raw;
 }
 function overrideEffect(override) {
   effect = override;
@@ -10926,15 +10926,6 @@ var MarkdownEngine = class {
   registerAsyncResolver(directive2, resolverFunction) {
     this.asyncResolvers[directive2] = resolverFunction;
   }
-  get directiveRegex() {
-    const directives2 = Object.keys(this.asyncResolvers).join("|");
-    return new RegExp(`{{(${directives2}) "(.+?)"}}`, "g");
-  }
-  /**
-   * Register a custom token and its resolver.
-   * @param tokenName - The name of the token (e.g. "BUTTON")
-   * @param resolver - The function that resolves the token to HTML
-   */
   registerToken(tokenName, resolver) {
     this.handlebars.registerHelper(tokenName, resolver);
   }
@@ -10945,25 +10936,56 @@ var MarkdownEngine = class {
     }
     return await resolver(token);
   }
-  async preprocessData(markdownContent) {
-    let processedContent = markdownContent;
-    let data3 = {};
-    let match;
-    for (const match2 of markdownContent.matchAll(this.directiveRegex)) {
-      const directive2 = match2[1];
-      const token = match2[2];
-      const tokenData = await this.getAsyncDataForDirective(directive2, token);
-      data3[token] = tokenData;
+  extractDirectiveData(statement) {
+    if (statement.type === "MustacheStatement" || statement.type === "BlockStatement") {
+      const name = statement.path?.original;
+      const param = statement.params?.[0]?.original;
+      return {
+        name,
+        param
+      };
     }
-    return { content: processedContent, data: data3 };
+    return {};
+  }
+  async preprocessData(content, tokens) {
+    let data3 = {};
+    for (const [placeholder, originalDirective] of tokens.entries()) {
+      const parsed = import_handlebars.default.parse(originalDirective);
+      const directiveData = this.extractDirectiveData(parsed.body[0]);
+      const directive2 = directiveData?.name;
+      const token = directiveData?.param;
+      if (directive2 && token) {
+        content = content.replace(placeholder, originalDirective);
+      }
+    }
+    return { content, data: data3 };
+  }
+  extractTokens(content) {
+    const tokenRegex = /{{([A-Z0-9]+)[^}]*}}/g;
+    const tokens = /* @__PURE__ */ new Map();
+    let match;
+    while ((match = tokenRegex.exec(content)) !== null) {
+      const placeholder = `TOKEN_${tokens.size + 1}`;
+      tokens.set(placeholder, match[0]);
+      content = content.replace(match[0], placeholder);
+      tokenRegex.lastIndex = 0;
+    }
+    return { modifiedContent: content, tokens };
+  }
+  injectTokens(content, tokens) {
+    let processedContent = content;
+    tokens.forEach((value, key) => {
+      processedContent = processedContent.replace(key, value);
+    });
+    return processedContent;
   }
   async render(markdownContent) {
-    debugger;
-    const md = marked.parse(markdownContent, { renderer: mdRenderer });
-    const { content, data: data3 } = await this.preprocessData(md);
+    let { modifiedContent, tokens } = this.extractTokens(markdownContent);
+    const md = marked.parse(modifiedContent, { renderer: mdRenderer });
+    let { content, data: data3 } = await this.preprocessData(md, tokens);
+    content = this.injectTokens(content, tokens);
     const replacedContent = this.handlebars.compile(content)(data3);
-    const ret = replacedContent;
-    return ret;
+    return replacedContent;
   }
 };
 
@@ -10972,6 +10994,11 @@ var args = new URLSearchParams(location.search);
 var params = JSON.parse(args.get("q"));
 var opts = JSON.parse(args.get("o") || "{}");
 var showToolbar = !opts.hideToolbar;
+var recipe = params.recipe;
+var resolveComponents = async () => {
+  const keys = Object.values(recipe.rete.nodes).map((node) => node.name);
+  return await window.parent.client.blocks.getInstances(keys);
+};
 var OmniResourceWrapper = class _OmniResourceWrapper {
   static isPlaceholder(obj) {
     return obj?.onclick != null;
@@ -10987,31 +11014,9 @@ var OmniResourceWrapper = class _OmniResourceWrapper {
   }
 };
 var data2 = module_default.reactive({
-  file: null
+  file: null,
+  inputs: {}
 });
-var parseContent = async () => {
-  const args2 = new URLSearchParams(location.search);
-  const params2 = JSON.parse(args2.get("q"));
-  if (params2) {
-    let rawText = "";
-    if (params2.file && params2.file.fid) {
-      data2.file = params2.file;
-      let x = await fetch("/fid/" + params2.file.fid);
-      rawText = await x.text();
-    } else if (params2.url) {
-      let x = await fetch(params2.url);
-      rawText = await x.text();
-    } else if (params2.data) {
-      rawText = params2.data;
-    } else if (params2.markdown) {
-      rawText = params2.markdown;
-    } else if (params2.text) {
-      rawText = params2.text;
-    }
-    return rawText;
-  }
-  return "";
-};
 var sendToChat = async (img) => {
   if (Array.isArray(img)) {
     let obj = {};
@@ -11069,51 +11074,56 @@ var copyToClipboardComponent = () => {
     }
   };
 };
-window.Alpine = module_default;
-window.Alpine = module_default;
-document.addEventListener("alpine:init", async () => {
-  module_default.data("appState", () => ({
-    copyToClipboardComponent
-  }));
-});
-var markdownEngine = new MarkdownEngine();
-markdownEngine.registerAsyncResolver("BLOCK", async (token) => {
-  return await window.parent.client.blocks.getInstance(token);
-});
-markdownEngine.registerToken("BUTTON", function(text, action, options2) {
-  return new import_handlebars2.default.SafeString(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}"  @click="run_button(this)">${text}</button>`);
-});
-markdownEngine.registerToken("START_BUTTON", function(text, action, options2) {
-  return new import_handlebars2.default.SafeString(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}"  @click="window.parent.client.runScript('run')">Start!</button>`);
-});
-var blocks = {};
-markdownEngine.registerToken("BLOCK", function(token, options2) {
-  const block2 = this[token];
-  const html = [];
-  if (block2 && Object.keys(block2)) {
-    blocks[token] = block2;
-    html.push(`<div> `);
-    html.push(`<div class='p-2 font-semibold text-lg'>${block2.title || block2.displayOperationId}</div>`);
-    if (block2.description) {
-      html.push(`<p class='flex-grow p-2'>${block2.description}</p>`);
+var engine = new MarkdownEngine();
+var setup = async function() {
+  const components = await resolveComponents();
+  engine.registerToken("BUTTON", function(title, action, argsString) {
+    const args2 = JSON.parse(argsString || "[]");
+    const safeArgs = JSON.stringify(args2).replace(/"/g, "&quot;");
+    return new import_handlebars2.default.SafeString(`<button @click="runAction('${action}', ${safeArgs})">${title}</button>`);
+  });
+  engine.registerToken("INPUT", function(index, key, title) {
+    var _a;
+    const node = Object.values(recipe.rete.nodes).find((n) => n.id == index);
+    let component = components.find((c) => c.name === node.name);
+    const inputDetail = component.inputs[key];
+    if (!inputDetail) {
+      return `<div>Error: Input not found.</div>`;
     }
-    html.push(`<div style='display: flex;resize: horizontal; border: 1px solid black;'> `);
-    html.push(`<table x-data='blocks["${token}"]'>`);
-    html.push(`</table>
-  <div class='flex-grow p-2' x-text='__result'>Output</div>`);
-    html.push(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' @click="block.run()">Run</button>`);
-    html.push(`</div>`);
-    html.push(`</div>`);
-    return html.join("");
-  }
-  return `<div>Block ${token} not found</div>`;
-});
+    const uid2 = index + ":" + key;
+    title = title || inputDetail.title;
+    let inputElement = "";
+    data2.inputs ?? (data2.inputs = {});
+    (_a = data2.inputs)[uid2] ?? (_a[uid2] = node.data[key]);
+    switch (inputDetail.type) {
+      case "string":
+        inputElement = `
+            <div class="field-row flex flex-wrap w-full mb-2" x-data="{'uid': '${uid2}'}">
+              <label class="w-full font-semibold" for='in_${inputDetail.name}'>${title}</label>
+              <textarea id="in_${inputDetail.name}" class="w-full" type="text" placeholder="${inputDetail.placeholder}" x-model="data.inputs[uid]" ></textarea>
+              <span class='w-full flex items-start'>
+                <span class='flex-grow'></span>
+                <small>${inputDetail.description}</small>
+              </span>
+            </div>`;
+        break;
+      default:
+        inputElement = `<div>Unsupported input type: ${inputDetail.type}</div>`;
+        break;
+    }
+    return new import_handlebars2.default.SafeString(`
+        ${inputElement}
+    </div>
+    `);
+  });
+};
 var createContent = function() {
   return {
     html: "",
     async init() {
       if (this.html.length == 0) {
-        this.html = markdownEngine.render(await parseContent());
+        await setup();
+        this.html = await engine.render(recipe.meta.help);
       }
     }
   };
@@ -11131,8 +11141,7 @@ document.addEventListener(
       sendToChat,
       run_button,
       data: data2,
-      showToolbar,
-      blocks
+      showToolbar
     }));
   }
 );
