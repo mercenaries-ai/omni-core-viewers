@@ -5,3 +5,16 @@ author: Mercenaries.ai Team
 origin: https://github.com/mercenaries-ai/omni-core-viewers.git
 client:
   addToWorkbench: false
+  fileIntents:
+    show:
+      'application/pdf':
+        page: pdf
+        opts: {}
+
+      'text/plain':
+        page: markdown
+        opts: {}
+
+      'text/markdown':
+        page: markdown
+        opts: {}

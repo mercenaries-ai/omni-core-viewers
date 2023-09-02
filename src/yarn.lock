@@ -313,13 +313,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assignment@npm:2.0.0":
-  version: 2.0.0
-  resolution: "assignment@npm:2.0.0"
-  checksum: d40217907165de9b4782d81d0fb6ef145c63d6bc70a89f379e1cae7459ad805e50b83dc585982479d943fd4de575a51aaaa2298263a31765a7669223c40995ce
-  languageName: node
-  linkType: hard
-
 "assignment@npm:2.2.0":
   version: 2.2.0
   resolution: "assignment@npm:2.2.0"
@@ -796,15 +789,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"he@npm:0.5.0":
-  version: 0.5.0
-  resolution: "he@npm:0.5.0"
-  bin:
-    he: bin/he
-  checksum: f39da362d871daf36ad487aa3fcac8bd2d9b350ea378f4f3854dceacf73c2663ec672fc8c18e708c983f4d76ebd38e24640c46d0cd92dd3493aaf3a19ca93967
-  languageName: node
-  linkType: hard
-
 "http-cache-semantics@npm:^4.1.1":
   version: 4.1.1
   resolution: "http-cache-semantics@npm:4.1.1"
@@ -886,16 +870,6 @@ __metadata:
   version: 2.0.4
   resolution: "inherits@npm:2.0.4"
   checksum: 4a48a733847879d6cf6691860a6b1e3f0f4754176e4d71494c41f3475553768b10f84b5ce1d40fbd0e34e6bfbb864ee35858ad4dd2cf31e02fc4a154b724d7f1
-  languageName: node
-  linkType: hard
-
-"insane@npm:^2.6.2":
-  version: 2.6.2
-  resolution: "insane@npm:2.6.2"
-  dependencies:
-    assignment: 2.0.0
-    he: 0.5.0
-  checksum: 36db602e97e4ad652e5d759e1e43eca36c6066b71e43cfe8351c4befd026de995e556f35a58acdb82b6cffb60e45d9d3ede65426e5d4fbe9ac5fb6f7b2b864f6
   languageName: node
   linkType: hard
 
@@ -1242,10 +1216,16 @@ __metadata:
     esbuild: ^0.18.4
     esbuild-sass-plugin: ^2.10.0
     handlebars: ^4.7.8
-    insane: ^2.6.2
     marked: ^7.0.3
+    omni-sdk: "link:../../../../omni-sdk/"
     typescript: ^5.1.3
   languageName: unknown
+  linkType: soft
+
+"omni-sdk@link:../../../../omni-sdk/::locator=omni-core-viewers%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "omni-sdk@link:../../../../omni-sdk/::locator=omni-core-viewers%40workspace%3A."
+  languageName: node
   linkType: soft
 
 "once@npm:^1.3.0":

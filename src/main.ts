@@ -1,9 +1,10 @@
 import Handlebars, { HelperDelegate } from 'handlebars';
 import Alpine from 'alpinejs';
 import './style.scss';
+import {OmniSDKClient} from 'omni-sdk';
+import {MarkdownEngine} from 'omni-sdk';
 
-import {MarkdownEngine} from './MarkdownEngine';
-
+const sdk = new OmniSDKClient("omni-core-viewers").init();
 
 declare global {
   interface Window {
@@ -11,63 +12,22 @@ declare global {
   }
 }
 
+
 // -------------------- Viewer Mode: If q.focusedItem is set, we hide the gallery and show the item full screen -----------------------
-const args = new URLSearchParams(location.search);
-const params = JSON.parse(args.get('q'));
-const opts = JSON.parse(args.get('o')|| "{}" );
+const opts = sdk.options
 const showToolbar = !opts.hideToolbar;
+const args = sdk.args
 
-class OmniResourceWrapper
-{
-
-  static isPlaceholder(obj:any)
-  {
-    return obj?.onclick != null
-  }
-
-  static isAudio(obj:any)
-  {
-    return obj && !OmniResourceWrapper.isPlaceholder(obj) && obj?.mimeType?.startsWith('audio/') || obj.mimeType == 'application/ogg'
-  }
-
-  static isImage(obj:any)
-  {
-    return obj && !OmniResourceWrapper.isPlaceholder(obj) &&  obj?.mimeType?.startsWith('image/')
-  }
-
-  static isDocument(obj:any)
-  {
-    return obj && !OmniResourceWrapper.isPlaceholder(obj) &&  (obj?.mimeType?.startsWith('text/') || obj?.mimeType?.startsWith('application/pdf'))
-  }
-
-
-}
-
-
-const runExtensionScript = async (scriptName: string, payload: any) => {
-  const response = await fetch(
-    '/api/v1/mercenaries/runscript/omni-core-viewers:' + scriptName,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    }
-  );
-  console.log('runExtensionScript response', response);
-  const data = await response.json();
-  console.log(scriptName, data);
-  return data;
-};
 
 
 let data = Alpine.reactive({
   file: null,
+  markdown: null
 })
+debugger;
 const  parseContent = async ()=>
 {
-
+  debugger;
   const args = new URLSearchParams(location.search)
 
   const params = JSON.parse(args.get('q'))
@@ -76,9 +36,12 @@ const  parseContent = async ()=>
     let rawText = ''
     if (params.file && params.file.fid)
     {
+
       data.file = params.file
-      let x = await fetch('/fid/'+params.file.fid)
-      rawText = await x.text()
+      /*let x = await fetch('/fid/'+params.file.fid)
+      rawText = await x.text()*/
+      let result = await sdk.runExtensionScript('markdown', {fid: params.file.fid})
+      rawText = result.html
     }
     else if (params.url)
     {
@@ -115,6 +78,8 @@ const  parseContent = async ()=>
 }
 
 const sendToChat = async (img) => {
+  if (!img) return;
+
 
   if (Array.isArray(img)) {
 
@@ -123,15 +88,15 @@ const sendToChat = async (img) => {
     img.forEach(o => {
 
       let type
-      if (OmniResourceWrapper.isAudio(o))
+      if (sdk.Resource.isAudio(o))
       {
         type='audio'
       }
-      else if (OmniResourceWrapper.isImage(o))
+      else if (sdk.Resource.isImage(o))
       {
         type = 'images'
       }
-      else if (OmniResourceWrapper.isDocument(o))
+      else if (sdk.Resource.isDocument(o))
       {
         type = 'documents'
       }
@@ -151,15 +116,15 @@ const sendToChat = async (img) => {
 
   let type
 
-  if (OmniResourceWrapper.isAudio(img))
+  if (sdk.Resource.isAudio(img))
   {
     type = 'audio'
   }
-  else if (OmniResourceWrapper.isImage(img))
+  else if (sdk.Resource.isImage(img))
   {
     type = 'images'
   }
-  else if (OmniResourceWrapper.isDocument(img))
+  else if (sdk.Resource.isDocument(img))
   {
     type = 'documents'
 
@@ -167,8 +132,7 @@ const sendToChat = async (img) => {
     let obj = {}
     obj[type] =  [{ ...img }]
 
-    //@ts-expect-error
-    window.parent.client.sendSystemMessage(``, 'text/markdown', {
+    sdk.sendChatMessage(``, 'text/markdown', {
       ...obj, commands: [
         { 'id': 'run', title: '🞂 Run', args: [null, { ...img }] }]
     }, ['no-picture'])
@@ -178,46 +142,11 @@ const sendToChat = async (img) => {
 
 
 
-const copyToClipboardComponent = () => {
-  return {
-    copyText: '',
-    copyNotification: false,
-
-    async copyToClipboard(item) {
-      const res = await fetch(item.url);
-      const blob = await res.blob();
-      const data = [new ClipboardItem({ [blob.type]: blob })];
-      await navigator.clipboard.write(data);
-      //alert('Item copied to clipboard');
-      //navigator.clipboard.writeText(this.copyText);
-      this.copyNotification = true;
-      let that = this;
-      setTimeout(function () {
-        that.copyNotification = false;
-      }, 3000);
-    },
-  };
-};
-
-window.Alpine = Alpine;
-
-window.Alpine = Alpine;
-
-document.addEventListener('alpine:init', async () => {
-  Alpine.data('appState', () => ({
-    copyToClipboardComponent,
-  }));
-
-
-});
-
-
-
 const markdownEngine = new MarkdownEngine()
 
-
+/*
 markdownEngine.registerAsyncResolver("BLOCK", async (token) => {
-  //@ts-expect-error
+
   return await window.parent.client.blocks.getInstance(token)
 
 });
@@ -231,6 +160,7 @@ markdownEngine.registerToken('START_BUTTON', function(text: string, action: stri
 });
 
 
+*/
 
 
 
@@ -277,11 +207,13 @@ const createContent = function () {
 
   return  {
     html: '',
+    markdown:'',
     async init()
     {
       if (this.html.length == 0)
       {
-        this.html = markdownEngine.render(await parseContent())
+
+        this.html = await parseContent()
       }
     }
   }
@@ -289,19 +221,35 @@ const createContent = function () {
 
 const run_button = function(button)
 {
-  alert("ya")
 }
 
 window.Alpine = Alpine
 document.addEventListener('alpine:init', async () => {
   Alpine.data('appState', () => ({
-    copyToClipboardComponent,
     createContent,
     sendToChat,
     run_button,
     data,
     showToolbar,
-    blocks: blocks
+    blocks: blocks,
+    async copyToClipboard() {
+      return {
+        copyText: '',
+        copyNotification: false,
+
+        async copyToClipboard() {
+          alert(this.markdown)
+          await navigator.clipboard.writeText(this.markdown);
+          //alert('Item copied to clipboard');
+          //navigator.clipboard.writeText(this.copyText);
+          this.copyNotification = true;
+          let that = this;
+          setTimeout(function () {
+            that.copyNotification = false;
+          }, 3000);
+        },
+      };
+    }
   }
   ))
 

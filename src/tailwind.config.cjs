@@ -25,7 +25,7 @@ export default {
       {
         '6': '24px',
         '7': '28px',
-        '8': 2 + 'rem',
+        '8': '2rem',
       },
       minWidth: {
         '2': '2px',
