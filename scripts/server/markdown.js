@@ -3,17 +3,22 @@ const script = {
 
   exec: async function (ctx, payload) {
     console.log(payload)
-    if (payload.fid)
+    if (payload.markdown)
     {
-      debugger;
+      const engine = new ctx.app.sdkHost.MarkdownEngine();
+      let html = await engine.render(payload.markdown)
+      return {html}
+    }
+    else if (payload.fid)
+    {
+
       let file = await ctx.app.cdn.getByFid(payload.fid)
       const engine = new ctx.app.sdkHost.MarkdownEngine();
       if (file.mimeType === "text/markdown")
       {
         let text = file.data.toString()
         let html = await engine.render(text)
-        console.log(text)
-        console.log(html)
+
         return {html}
       }
     }

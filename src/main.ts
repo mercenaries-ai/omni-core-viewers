@@ -24,10 +24,10 @@ let data = Alpine.reactive({
   file: null,
   markdown: null
 })
-debugger;
+
 const  parseContent = async ()=>
 {
-  debugger;
+
   const args = new URLSearchParams(location.search)
 
   const params = JSON.parse(args.get('q'))
@@ -54,7 +54,8 @@ const  parseContent = async ()=>
     }
     else if (params.markdown)
     {
-        rawText = params.markdown
+      let result = await sdk.runExtensionScript('markdown', {markdown: params.markdown})
+      rawText = data.markdown =   result.html
     }
     else if (params.text)
     {
@@ -237,8 +238,9 @@ document.addEventListener('alpine:init', async () => {
         copyText: '',
         copyNotification: false,
 
+
         async copyToClipboard() {
-          alert(this.markdown)
+
           await navigator.clipboard.writeText(this.markdown);
           //alert('Item copied to clipboard');
           //navigator.clipboard.writeText(this.copyText);

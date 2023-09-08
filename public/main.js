@@ -3143,11 +3143,11 @@ var pn = v((ht, hn) => {
   function Ms(n6) {
     return n6 && n6.__esModule ? n6 : { default: n6 };
   }
-  var Te = A(), Ls = D(), Os = Ms(Ls);
+  var Te = A(), Os = D(), Ls = Ms(Os);
   ht.default = function(n6) {
     n6.registerHelper("each", function(e, t) {
       if (!t)
-        throw new Os.default("Must pass iterator to #each");
+        throw new Ls.default("Must pass iterator to #each");
       var r = t.fn, i = t.inverse, s = 0, o = "", a = void 0, u = void 0;
       t.data && t.ids && (u = Te.appendContextPath(t.data.contextPath, t.ids[0]) + "."), Te.isFunction(e) && (e = e.call(this)), t.data && (a = Te.createFrame(t.data));
       function l(_, y, x) {
@@ -3262,9 +3262,9 @@ var lr = v((_t) => {
   function ae(n6) {
     return n6 && n6.__esModule ? n6 : { default: n6 };
   }
-  var zs = cn(), Fs = ae(zs), Gs = pn(), Ws = ae(Gs), Us = dn(), Vs = ae(Us), Ks = vn(), Zs = ae(Ks), js = kn(), Qs = ae(js), Js = Sn(), Ys = ae(Js), Xs = xn(), $s = ae(Xs);
+  var zs = cn(), Fs = ae(zs), Gs = pn(), Ws = ae(Gs), Us = dn(), Vs = ae(Us), Ks = vn(), Zs = ae(Ks), js = kn(), Js = ae(js), Qs = Sn(), Ys = ae(Qs), Xs = xn(), $s = ae(Xs);
   function eo(n6) {
-    Fs.default(n6), Ws.default(n6), Vs.default(n6), Zs.default(n6), Qs.default(n6), Ys.default(n6), $s.default(n6);
+    Fs.default(n6), Ws.default(n6), Vs.default(n6), Zs.default(n6), Js.default(n6), Ys.default(n6), $s.default(n6);
   }
   function to(n6, e, t) {
     n6.helpers[e] && (n6.hooks[e] = n6.helpers[e], t || delete n6.helpers[e]);
@@ -3340,17 +3340,17 @@ var pr = v((De) => {
   function co(n6) {
     return n6 && n6.__esModule ? n6 : { default: n6 };
   }
-  var Ln = Mn(), ho = cr(), po = co(ho), kt = /* @__PURE__ */ Object.create(null);
+  var On = Mn(), ho = cr(), po = co(ho), kt = /* @__PURE__ */ Object.create(null);
   function fo(n6) {
     var e = /* @__PURE__ */ Object.create(null);
     e.constructor = false, e.__defineGetter__ = false, e.__defineSetter__ = false, e.__lookupGetter__ = false;
     var t = /* @__PURE__ */ Object.create(null);
-    return t.__proto__ = false, { properties: { whitelist: Ln.createNewLookupObject(t, n6.allowedProtoProperties), defaultValue: n6.allowProtoPropertiesByDefault }, methods: { whitelist: Ln.createNewLookupObject(e, n6.allowedProtoMethods), defaultValue: n6.allowProtoMethodsByDefault } };
+    return t.__proto__ = false, { properties: { whitelist: On.createNewLookupObject(t, n6.allowedProtoProperties), defaultValue: n6.allowProtoPropertiesByDefault }, methods: { whitelist: On.createNewLookupObject(e, n6.allowedProtoMethods), defaultValue: n6.allowProtoMethodsByDefault } };
   }
   function go(n6, e, t) {
-    return On(typeof n6 == "function" ? e.methods : e.properties, t);
+    return Ln(typeof n6 == "function" ? e.methods : e.properties, t);
   }
-  function On(n6, e) {
+  function Ln(n6, e) {
     return n6.whitelist[e] !== void 0 ? n6.whitelist[e] === true : n6.defaultValue !== void 0 ? n6.defaultValue : (mo(e), false);
   }
   function mo(n6) {
@@ -3457,7 +3457,7 @@ var zn = v((re) => {
   function Mo(n6) {
     return n6 && n6.__esModule ? n6 : { default: n6 };
   }
-  function Lo(n6) {
+  function Oo(n6) {
     if (n6 && n6.__esModule)
       return n6;
     var e = {};
@@ -3466,12 +3466,12 @@ var zn = v((re) => {
         Object.prototype.hasOwnProperty.call(n6, t) && (e[t] = n6[t]);
     return e.default = n6, e;
   }
-  var Oo = A(), Z = Lo(Oo), Ao = D(), j = Mo(Ao), Q = St(), Dn = lr(), Ro = Nn(), Bn = pr();
+  var Lo = A(), Z = Oo(Lo), Ao = D(), j = Mo(Ao), J = St(), Dn = lr(), Ro = Nn(), Bn = pr();
   function To(n6) {
-    var e = n6 && n6[0] || 1, t = Q.COMPILER_REVISION;
-    if (!(e >= Q.LAST_COMPATIBLE_COMPILER_REVISION && e <= Q.COMPILER_REVISION))
-      if (e < Q.LAST_COMPATIBLE_COMPILER_REVISION) {
-        var r = Q.REVISION_CHANGES[t], i = Q.REVISION_CHANGES[e];
+    var e = n6 && n6[0] || 1, t = J.COMPILER_REVISION;
+    if (!(e >= J.LAST_COMPATIBLE_COMPILER_REVISION && e <= J.COMPILER_REVISION))
+      if (e < J.LAST_COMPATIBLE_COMPILER_REVISION) {
+        var r = J.REVISION_CHANGES[t], i = J.REVISION_CHANGES[e];
         throw new j.default("Template was precompiled with an older version of Handlebars than the current runtime. Please update your precompiler to a newer version (" + r + ") or downgrade your runtime to an older version (" + i + ").");
       } else
         throw new j.default("Template was precompiled with a newer version of Handlebars than the current runtime. Please update your runtime to a newer version (" + n6[1] + ").");
@@ -3570,11 +3570,11 @@ var zn = v((re) => {
     t.partial = true, t.ids && (t.data.contextPath = t.ids[0] || t.data.contextPath);
     var i = void 0;
     if (t.fn && t.fn !== qn && function() {
-      t.data = Q.createFrame(t.data);
+      t.data = J.createFrame(t.data);
       var s = t.fn;
       i = t.data["partial-block"] = function(a) {
         var u = arguments.length <= 1 || arguments[1] === void 0 ? {} : arguments[1];
-        return u.data = Q.createFrame(u.data), u.data["partial-block"] = r, s(a, u);
+        return u.data = J.createFrame(u.data), u.data["partial-block"] = r, s(a, u);
       }, s.partials && (t.partials = Z.extend({}, t.partials, s.partials));
     }(), n6 === void 0 && i && (n6 = i), n6 === void 0)
       throw new j.default("The partial " + t.name + " could not be found");
@@ -3585,7 +3585,7 @@ var zn = v((re) => {
     return "";
   }
   function qo(n6, e) {
-    return (!e || !("root" in e)) && (e = e ? Q.createFrame(e) : {}, e.root = n6), e;
+    return (!e || !("root" in e)) && (e = e ? J.createFrame(e) : {}, e.root = n6), e;
   }
   function Hn(n6, e, t, r, i, s) {
     if (n6.decorator) {
@@ -3638,7 +3638,7 @@ var Kn = v((Et, Vn) => {
         Object.prototype.hasOwnProperty.call(n6, t) && (e[t] = n6[t]);
     return e.default = n6, e;
   }
-  var Fo = St(), Gn = br(Fo), Go = Tn(), Wo = kr(Go), Uo = D(), Vo = kr(Uo), Ko = A(), yr = br(Ko), Zo = zn(), Wn = br(Zo), jo = vr(), Qo = kr(jo);
+  var Fo = St(), Gn = br(Fo), Go = Tn(), Wo = kr(Go), Uo = D(), Vo = kr(Uo), Ko = A(), yr = br(Ko), Zo = zn(), Wn = br(Zo), jo = vr(), Jo = kr(jo);
   function Un() {
     var n6 = new Gn.HandlebarsEnvironment();
     return yr.extend(n6, Gn), n6.SafeString = Wo.default, n6.Exception = Vo.default, n6.Utils = yr, n6.escapeExpression = yr.escapeExpression, n6.VM = Wn, n6.template = function(e) {
@@ -3647,7 +3647,7 @@ var Kn = v((Et, Vn) => {
   }
   var Be = Un();
   Be.create = Un;
-  Qo.default(Be);
+  Jo.default(Be);
   Be.default = Be;
   Et.default = Be;
   Vn.exports = Et.default;
@@ -3665,10 +3665,10 @@ var Sr = v((It, jn) => {
   It.default = Zn;
   jn.exports = It.default;
 });
-var Jn = v((Pt, Qn) => {
+var Qn = v((Pt, Jn) => {
   "use strict";
   Pt.__esModule = true;
-  var Jo = function() {
+  var Qo = function() {
     var n6 = { trace: function() {
     }, yy: {}, symbols_: { error: 2, root: 3, program: 4, EOF: 5, program_repetition0: 6, statement: 7, mustache: 8, block: 9, rawBlock: 10, partial: 11, partialBlock: 12, content: 13, COMMENT: 14, CONTENT: 15, openRawBlock: 16, rawBlock_repetition0: 17, END_RAW_BLOCK: 18, OPEN_RAW_BLOCK: 19, helperName: 20, openRawBlock_repetition0: 21, openRawBlock_option0: 22, CLOSE_RAW_BLOCK: 23, openBlock: 24, block_option0: 25, closeBlock: 26, openInverse: 27, block_option1: 28, OPEN_BLOCK: 29, openBlock_repetition0: 30, openBlock_option0: 31, openBlock_option1: 32, CLOSE: 33, OPEN_INVERSE: 34, openInverse_repetition0: 35, openInverse_option0: 36, openInverse_option1: 37, openInverseChain: 38, OPEN_INVERSE_CHAIN: 39, openInverseChain_repetition0: 40, openInverseChain_option0: 41, openInverseChain_option1: 42, inverseAndProgram: 43, INVERSE: 44, inverseChain: 45, inverseChain_option0: 46, OPEN_ENDBLOCK: 47, OPEN: 48, mustache_repetition0: 49, mustache_option0: 50, OPEN_UNESCAPED: 51, mustache_repetition1: 52, mustache_option1: 53, CLOSE_UNESCAPED: 54, OPEN_PARTIAL: 55, partialName: 56, partial_repetition0: 57, partial_option0: 58, openPartialBlock: 59, OPEN_PARTIAL_BLOCK: 60, openPartialBlock_repetition0: 61, openPartialBlock_option0: 62, param: 63, sexpr: 64, OPEN_SEXPR: 65, sexpr_repetition0: 66, sexpr_option0: 67, CLOSE_SEXPR: 68, hash: 69, hash_repetition_plus0: 70, hashSegment: 71, ID: 72, EQUALS: 73, blockParams: 74, OPEN_BLOCK_PARAMS: 75, blockParams_repetition_plus0: 76, CLOSE_BLOCK_PARAMS: 77, path: 78, dataName: 79, STRING: 80, NUMBER: 81, BOOLEAN: 82, UNDEFINED: 83, NULL: 84, DATA: 85, pathSegments: 86, SEP: 87, $accept: 0, $end: 1 }, terminals_: { 2: "error", 5: "EOF", 14: "COMMENT", 15: "CONTENT", 18: "END_RAW_BLOCK", 19: "OPEN_RAW_BLOCK", 23: "CLOSE_RAW_BLOCK", 29: "OPEN_BLOCK", 33: "CLOSE", 34: "OPEN_INVERSE", 39: "OPEN_INVERSE_CHAIN", 44: "INVERSE", 47: "OPEN_ENDBLOCK", 48: "OPEN", 51: "OPEN_UNESCAPED", 54: "CLOSE_UNESCAPED", 55: "OPEN_PARTIAL", 60: "OPEN_PARTIAL_BLOCK", 65: "OPEN_SEXPR", 68: "CLOSE_SEXPR", 72: "ID", 73: "EQUALS", 75: "OPEN_BLOCK_PARAMS", 77: "CLOSE_BLOCK_PARAMS", 80: "STRING", 81: "NUMBER", 82: "BOOLEAN", 83: "UNDEFINED", 84: "NULL", 85: "DATA", 87: "SEP" }, productions_: [0, [3, 2], [4, 1], [7, 1], [7, 1], [7, 1], [7, 1], [7, 1], [7, 1], [7, 1], [13, 1], [10, 3], [16, 5], [9, 4], [9, 4], [24, 6], [27, 6], [38, 6], [43, 2], [45, 3], [45, 1], [26, 3], [8, 5], [8, 5], [11, 5], [12, 3], [59, 5], [63, 1], [63, 1], [64, 5], [69, 1], [71, 3], [74, 3], [20, 1], [20, 1], [20, 1], [20, 1], [20, 1], [20, 1], [20, 1], [56, 1], [56, 1], [79, 2], [78, 1], [86, 3], [86, 1], [6, 0], [6, 2], [17, 0], [17, 2], [21, 0], [21, 2], [22, 0], [22, 1], [25, 0], [25, 1], [28, 0], [28, 1], [30, 0], [30, 2], [31, 0], [31, 1], [32, 0], [32, 1], [35, 0], [35, 2], [36, 0], [36, 1], [37, 0], [37, 1], [40, 0], [40, 2], [41, 0], [41, 1], [42, 0], [42, 1], [46, 0], [46, 1], [49, 0], [49, 2], [50, 0], [50, 1], [52, 0], [52, 2], [53, 0], [53, 1], [57, 0], [57, 2], [58, 0], [58, 1], [61, 0], [61, 2], [62, 0], [62, 1], [66, 0], [66, 2], [67, 0], [67, 1], [70, 1], [70, 2], [76, 1], [76, 2]], performAction: function(i, s, o, a, u, l, h) {
       var c = l.length - 1;
@@ -3903,16 +3903,16 @@ var Jn = v((Pt, Qn) => {
         var F;
         return F = s.lexer.lex() || 1, typeof F != "number" && (F = s.symbols_[F] || F), F;
       }
-      for (var P, se, oe, N, El, Qt, me = {}, Je, V, Xr, Ye; ; ) {
+      for (var P, se, oe, N, El, Jt, me = {}, Qe, V, Xr, Ye; ; ) {
         if (oe = o[o.length - 1], this.defaultActions[oe] ? N = this.defaultActions[oe] : ((P === null || typeof P > "u") && (P = ie()), N = l[oe] && l[oe][P]), typeof N > "u" || !N.length || !N[0]) {
-          var Jt = "";
+          var Qt = "";
           if (!f) {
             Ye = [];
-            for (Je in l[oe])
-              this.terminals_[Je] && Je > 2 && Ye.push("'" + this.terminals_[Je] + "'");
-            this.lexer.showPosition ? Jt = "Parse error on line " + (c + 1) + `:
+            for (Qe in l[oe])
+              this.terminals_[Qe] && Qe > 2 && Ye.push("'" + this.terminals_[Qe] + "'");
+            this.lexer.showPosition ? Qt = "Parse error on line " + (c + 1) + `:
 ` + this.lexer.showPosition() + `
-Expecting ` + Ye.join(", ") + ", got '" + (this.terminals_[P] || P) + "'" : Jt = "Parse error on line " + (c + 1) + ": Unexpected " + (P == 1 ? "end of input" : "'" + (this.terminals_[P] || P) + "'"), this.parseError(Jt, { text: this.lexer.match, token: this.terminals_[P] || P, line: this.lexer.yylineno, loc: x, expected: Ye });
+Expecting ` + Ye.join(", ") + ", got '" + (this.terminals_[P] || P) + "'" : Qt = "Parse error on line " + (c + 1) + ": Unexpected " + (P == 1 ? "end of input" : "'" + (this.terminals_[P] || P) + "'"), this.parseError(Qt, { text: this.lexer.match, token: this.terminals_[P] || P, line: this.lexer.yylineno, loc: x, expected: Ye });
           }
         }
         if (N[0] instanceof Array && N.length > 1)
@@ -3922,8 +3922,8 @@ Expecting ` + Ye.join(", ") + ", got '" + (this.terminals_[P] || P) + "'" : Jt =
             o.push(P), a.push(this.lexer.yytext), u.push(this.lexer.yylloc), o.push(N[1]), P = null, se ? (P = se, se = null) : (p = this.lexer.yyleng, h = this.lexer.yytext, c = this.lexer.yylineno, x = this.lexer.yylloc, f > 0 && f--);
             break;
           case 2:
-            if (V = this.productions_[N[1]][1], me.$ = a[a.length - V], me._$ = { first_line: u[u.length - (V || 1)].first_line, last_line: u[u.length - 1].last_line, first_column: u[u.length - (V || 1)].first_column, last_column: u[u.length - 1].last_column }, C && (me._$.range = [u[u.length - (V || 1)].range[0], u[u.length - 1].range[1]]), Qt = this.performAction.call(me, h, p, c, this.yy, N[1], a, u), typeof Qt < "u")
-              return Qt;
+            if (V = this.productions_[N[1]][1], me.$ = a[a.length - V], me._$ = { first_line: u[u.length - (V || 1)].first_line, last_line: u[u.length - 1].last_line, first_column: u[u.length - (V || 1)].first_column, last_column: u[u.length - 1].last_column }, C && (me._$.range = [u[u.length - (V || 1)].range[0], u[u.length - 1].range[1]]), Jt = this.performAction.call(me, h, p, c, this.yy, N[1], a, u), typeof Jt < "u")
+              return Jt;
             V && (o = o.slice(0, -1 * V * 2), a = a.slice(0, -1 * V), u = u.slice(0, -1 * V)), o.push(this.productions_[N[1]][0]), a.push(me.$), u.push(me._$), Xr = l[o[o.length - 2]][o[o.length - 1]], o.push(Xr);
             break;
           case 3:
@@ -4109,12 +4109,12 @@ Expecting ` + Ye.join(", ") + ", got '" + (this.terminals_[P] || P) + "'" : Jt =
     }
     return t.prototype = n6, n6.Parser = t, new t();
   }();
-  Pt.default = Jo;
-  Qn.exports = Pt.default;
+  Pt.default = Qo;
+  Jn.exports = Pt.default;
 });
-var At = v((Ot, $n) => {
+var At = v((Lt, $n) => {
   "use strict";
-  Ot.__esModule = true;
+  Lt.__esModule = true;
   function Yo(n6) {
     return n6 && n6.__esModule ? n6 : { default: n6 };
   }
@@ -4148,11 +4148,11 @@ var At = v((Ot, $n) => {
     }
   }, Program: function(e) {
     this.acceptArray(e.body);
-  }, MustacheStatement: Lt, Decorator: Lt, BlockStatement: Yn, DecoratorBlock: Yn, PartialStatement: Xn, PartialBlockStatement: function(e) {
+  }, MustacheStatement: Ot, Decorator: Ot, BlockStatement: Yn, DecoratorBlock: Yn, PartialStatement: Xn, PartialBlockStatement: function(e) {
     Xn.call(this, e), this.acceptKey(e, "program");
   }, ContentStatement: function() {
   }, CommentStatement: function() {
-  }, SubExpression: Lt, PathExpression: function() {
+  }, SubExpression: Ot, PathExpression: function() {
   }, StringLiteral: function() {
   }, NumberLiteral: function() {
   }, BooleanLiteral: function() {
@@ -4163,17 +4163,17 @@ var At = v((Ot, $n) => {
   }, HashPair: function(e) {
     this.acceptRequired(e, "value");
   } };
-  function Lt(n6) {
+  function Ot(n6) {
     this.acceptRequired(n6, "path"), this.acceptArray(n6.params), this.acceptKey(n6, "hash");
   }
   function Yn(n6) {
-    Lt.call(this, n6), this.acceptKey(n6, "program"), this.acceptKey(n6, "inverse");
+    Ot.call(this, n6), this.acceptKey(n6, "program"), this.acceptKey(n6, "inverse");
   }
   function Xn(n6) {
     this.acceptRequired(n6, "name"), this.acceptArray(n6.params), this.acceptKey(n6, "hash");
   }
-  Ot.default = Mt;
-  $n.exports = Ot.default;
+  Lt.default = Mt;
+  $n.exports = Lt.default;
 });
 var ti = v((Rt, ei) => {
   "use strict";
@@ -4350,7 +4350,7 @@ var si = v((qe) => {
   function ni(n6) {
     return n6 && n6.__esModule ? n6 : { default: n6 };
   }
-  var ga = Jn(), Pr = ni(ga), ma = ti(), _a = ni(ma), va = ri(), ya = da(va), ka = A();
+  var ga = Qn(), Pr = ni(ga), ma = ti(), _a = ni(ma), va = ri(), ya = da(va), ka = A();
   qe.parser = Pr.default;
   var Tt = {};
   ka.extend(Tt, ya);
@@ -4561,22 +4561,22 @@ var ui = v((Ge) => {
     }
   }
 });
-var hi = v((Lr) => {
+var hi = v((Or) => {
   "use strict";
   var ci = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".split("");
-  Lr.encode = function(n6) {
+  Or.encode = function(n6) {
     if (0 <= n6 && n6 < ci.length)
       return ci[n6];
     throw new TypeError("Must be between 0 and 63: " + n6);
   };
-  Lr.decode = function(n6) {
+  Or.decode = function(n6) {
     var e = 65, t = 90, r = 97, i = 122, s = 48, o = 57, a = 43, u = 47, l = 26, h = 52;
     return e <= n6 && n6 <= t ? n6 - e : r <= n6 && n6 <= i ? n6 - r + l : s <= n6 && n6 <= o ? n6 - s + h : n6 == a ? 62 : n6 == u ? 63 : -1;
   };
 });
 var Rr = v((Ar) => {
   "use strict";
-  var pi = hi(), Or = 5, fi = 1 << Or, di = fi - 1, gi = fi;
+  var pi = hi(), Lr = 5, fi = 1 << Lr, di = fi - 1, gi = fi;
   function Ia(n6) {
     return n6 < 0 ? (-n6 << 1) + 1 : (n6 << 1) + 0;
   }
@@ -4587,7 +4587,7 @@ var Rr = v((Ar) => {
   Ar.encode = function(e) {
     var t = "", r, i = Ia(e);
     do
-      r = i & di, i >>>= Or, i > 0 && (r |= gi), t += pi.encode(r);
+      r = i & di, i >>>= Lr, i > 0 && (r |= gi), t += pi.encode(r);
     while (i > 0);
     return t;
   };
@@ -4598,12 +4598,12 @@ var Rr = v((Ar) => {
         throw new Error("Expected more digits in base 64 VLQ value.");
       if (u = pi.decode(e.charCodeAt(t++)), u === -1)
         throw new Error("Invalid base64 digit: " + e.charAt(t - 1));
-      a = !!(u & gi), u &= di, s = s + (u << o), o += Or;
+      a = !!(u & gi), u &= di, s = s + (u << o), o += Lr;
     } while (a);
     r.value = Pa(s), r.rest = t;
   };
 });
-var xe = v((L) => {
+var xe = v((O) => {
   "use strict";
   function Ma(n6, e, t) {
     if (e in n6)
@@ -4612,18 +4612,18 @@ var xe = v((L) => {
       return t;
     throw new Error('"' + e + '" is a required argument.');
   }
-  L.getArg = Ma;
-  var mi = /^(?:([\w+\-.]+):)?\/\/(?:(\w+:\w+)@)?([\w.-]*)(?::(\d+))?(.*)$/, La = /^data:.+\,.+$/;
+  O.getArg = Ma;
+  var mi = /^(?:([\w+\-.]+):)?\/\/(?:(\w+:\w+)@)?([\w.-]*)(?::(\d+))?(.*)$/, Oa = /^data:.+\,.+$/;
   function We(n6) {
     var e = n6.match(mi);
     return e ? { scheme: e[1], auth: e[2], host: e[3], port: e[4], path: e[5] } : null;
   }
-  L.urlParse = We;
+  O.urlParse = We;
   function Se(n6) {
     var e = "";
     return n6.scheme && (e += n6.scheme + ":"), e += "//", n6.auth && (e += n6.auth + "@"), n6.host && (e += n6.host), n6.port && (e += ":" + n6.port), n6.path && (e += n6.path), e;
   }
-  L.urlGenerate = Se;
+  O.urlGenerate = Se;
   function Tr(n6) {
     var e = n6, t = We(n6);
     if (t) {
@@ -4631,28 +4631,28 @@ var xe = v((L) => {
         return n6;
       e = t.path;
     }
-    for (var r = L.isAbsolute(e), i = e.split(/\/+/), s, o = 0, a = i.length - 1; a >= 0; a--)
+    for (var r = O.isAbsolute(e), i = e.split(/\/+/), s, o = 0, a = i.length - 1; a >= 0; a--)
       s = i[a], s === "." ? i.splice(a, 1) : s === ".." ? o++ : o > 0 && (s === "" ? (i.splice(a + 1, o), o = 0) : (i.splice(a, 2), o--));
     return e = i.join("/"), e === "" && (e = r ? "/" : "."), t ? (t.path = e, Se(t)) : e;
   }
-  L.normalize = Tr;
+  O.normalize = Tr;
   function _i(n6, e) {
     n6 === "" && (n6 = "."), e === "" && (e = ".");
     var t = We(e), r = We(n6);
     if (r && (n6 = r.path || "/"), t && !t.scheme)
       return r && (t.scheme = r.scheme), Se(t);
-    if (t || e.match(La))
+    if (t || e.match(Oa))
       return e;
     if (r && !r.host && !r.path)
       return r.host = e, Se(r);
     var i = e.charAt(0) === "/" ? e : Tr(n6.replace(/\/+$/, "") + "/" + e);
     return r ? (r.path = i, Se(r)) : i;
   }
-  L.join = _i;
-  L.isAbsolute = function(n6) {
+  O.join = _i;
+  O.isAbsolute = function(n6) {
     return n6.charAt(0) === "/" || mi.test(n6);
   };
-  function Oa(n6, e) {
+  function La(n6, e) {
     n6 === "" && (n6 = "."), n6 = n6.replace(/\/$/, "");
     for (var t = 0; e.indexOf(n6 + "/") !== 0; ) {
       var r = n6.lastIndexOf("/");
@@ -4662,7 +4662,7 @@ var xe = v((L) => {
     }
     return Array(t + 1).join("../") + e.substr(n6.length + 1);
   }
-  L.relative = Oa;
+  O.relative = La;
   var vi = function() {
     var n6 = /* @__PURE__ */ Object.create(null);
     return !("__proto__" in n6);
@@ -4673,11 +4673,11 @@ var xe = v((L) => {
   function Aa(n6) {
     return ki(n6) ? "$" + n6 : n6;
   }
-  L.toSetString = vi ? yi : Aa;
+  O.toSetString = vi ? yi : Aa;
   function Ra(n6) {
     return ki(n6) ? n6.slice(1) : n6;
   }
-  L.fromSetString = vi ? yi : Ra;
+  O.fromSetString = vi ? yi : Ra;
   function ki(n6) {
     if (!n6)
       return false;
@@ -4693,12 +4693,12 @@ var xe = v((L) => {
     var r = we(n6.source, e.source);
     return r !== 0 || (r = n6.originalLine - e.originalLine, r !== 0) || (r = n6.originalColumn - e.originalColumn, r !== 0 || t) || (r = n6.generatedColumn - e.generatedColumn, r !== 0) || (r = n6.generatedLine - e.generatedLine, r !== 0) ? r : we(n6.name, e.name);
   }
-  L.compareByOriginalPositions = Ta;
+  O.compareByOriginalPositions = Ta;
   function Na(n6, e, t) {
     var r = n6.generatedLine - e.generatedLine;
     return r !== 0 || (r = n6.generatedColumn - e.generatedColumn, r !== 0 || t) || (r = we(n6.source, e.source), r !== 0) || (r = n6.originalLine - e.originalLine, r !== 0) || (r = n6.originalColumn - e.originalColumn, r !== 0) ? r : we(n6.name, e.name);
   }
-  L.compareByGeneratedPositionsDeflated = Na;
+  O.compareByGeneratedPositionsDeflated = Na;
   function we(n6, e) {
     return n6 === e ? 0 : n6 === null ? 1 : e === null ? -1 : n6 > e ? 1 : -1;
   }
@@ -4706,11 +4706,11 @@ var xe = v((L) => {
     var t = n6.generatedLine - e.generatedLine;
     return t !== 0 || (t = n6.generatedColumn - e.generatedColumn, t !== 0) || (t = we(n6.source, e.source), t !== 0) || (t = n6.originalLine - e.originalLine, t !== 0) || (t = n6.originalColumn - e.originalColumn, t !== 0) ? t : we(n6.name, e.name);
   }
-  L.compareByGeneratedPositionsInflated = Da;
+  O.compareByGeneratedPositionsInflated = Da;
   function Ba(n6) {
     return JSON.parse(n6.replace(/^\)]}'[^\n]*\n/, ""));
   }
-  L.parseSourceMapInput = Ba;
+  O.parseSourceMapInput = Ba;
   function qa(n6, e, t) {
     if (e = e || "", n6 && (n6[n6.length - 1] !== "/" && e[0] !== "/" && (n6 += "/"), e = n6 + e), t) {
       var r = We(t);
@@ -4724,33 +4724,33 @@ var xe = v((L) => {
     }
     return Tr(e);
   }
-  L.computeSourceURL = qa;
+  O.computeSourceURL = qa;
 });
 var Br = v((bi) => {
   "use strict";
   var Nr = xe(), Dr = Object.prototype.hasOwnProperty, ce = typeof Map < "u";
-  function J() {
+  function Q() {
     this._array = [], this._set = ce ? /* @__PURE__ */ new Map() : /* @__PURE__ */ Object.create(null);
   }
-  J.fromArray = function(e, t) {
-    for (var r = new J(), i = 0, s = e.length; i < s; i++)
+  Q.fromArray = function(e, t) {
+    for (var r = new Q(), i = 0, s = e.length; i < s; i++)
       r.add(e[i], t);
     return r;
   };
-  J.prototype.size = function() {
+  Q.prototype.size = function() {
     return ce ? this._set.size : Object.getOwnPropertyNames(this._set).length;
   };
-  J.prototype.add = function(e, t) {
+  Q.prototype.add = function(e, t) {
     var r = ce ? e : Nr.toSetString(e), i = ce ? this.has(e) : Dr.call(this._set, r), s = this._array.length;
     (!i || t) && this._array.push(e), i || (ce ? this._set.set(e, s) : this._set[r] = s);
   };
-  J.prototype.has = function(e) {
+  Q.prototype.has = function(e) {
     if (ce)
       return this._set.has(e);
     var t = Nr.toSetString(e);
     return Dr.call(this._set, t);
   };
-  J.prototype.indexOf = function(e) {
+  Q.prototype.indexOf = function(e) {
     if (ce) {
       var t = this._set.get(e);
       if (t >= 0)
@@ -4762,15 +4762,15 @@ var Br = v((bi) => {
     }
     throw new Error('"' + e + '" is not in the set.');
   };
-  J.prototype.at = function(e) {
+  Q.prototype.at = function(e) {
     if (e >= 0 && e < this._array.length)
       return this._array[e];
     throw new Error("No element indexed by " + e);
   };
-  J.prototype.toArray = function() {
+  Q.prototype.toArray = function() {
     return this._array.slice();
   };
-  bi.ArraySet = J;
+  bi.ArraySet = Q;
 });
 var xi = v((wi) => {
   "use strict";
@@ -4928,7 +4928,7 @@ var Pi = v((Ii) => {
     Fr(n6, e, 0, n6.length - 1);
   };
 });
-var Li = v((Bt) => {
+var Oi = v((Bt) => {
   "use strict";
   var g = xe(), Gr = Ei(), Ce = Br().ArraySet, Ga = Rr(), Ve = Pi().quickSort;
   function w(n6, e) {
@@ -5206,7 +5206,7 @@ var Li = v((Bt) => {
   };
   Bt.IndexedSourceMapConsumer = H;
 });
-var Ai = v((Oi) => {
+var Ai = v((Li) => {
   "use strict";
   var Wa = qr().SourceMapGenerator, qt = xe(), Ua = /(\r?\n)/, Va = 10, Ee = "$$$isSourceNode$$$";
   function T(n6, e, t, r, i) {
@@ -5312,12 +5312,12 @@ var Ai = v((Oi) => {
       r.setSourceContent(l, h);
     }), { code: t.code, map: r };
   };
-  Oi.SourceNode = T;
+  Li.SourceNode = T;
 });
 var Ri = v((Ht) => {
   "use strict";
   Ht.SourceMapGenerator = qr().SourceMapGenerator;
-  Ht.SourceMapConsumer = Li().SourceMapConsumer;
+  Ht.SourceMapConsumer = Oi().SourceMapConsumer;
   Ht.SourceNode = Ai().SourceNode;
 });
 var Bi = v((zt, Di) => {
@@ -5508,7 +5508,7 @@ var Gi = v((Ft, Fi) => {
   }, resolvePath: function(e, t, r, i, s) {
     var o = this;
     if (this.options.strict || this.options.assumeObjects) {
-      this.push(Qa(this.options.strict && s, this, t, r, e));
+      this.push(Ja(this.options.strict && s, this, t, r, e));
       return;
     }
     for (var a = t.length; r < a; r++)
@@ -5670,7 +5670,7 @@ var Gi = v((Ft, Fi) => {
   Pe.isValidJavaScriptVariableName = function(n6) {
     return !Pe.RESERVED_WORDS[n6] && /^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(n6);
   };
-  function Qa(n6, e, t, r, i) {
+  function Ja(n6, e, t, r, i) {
     var s = e.popStack(), o = t.length;
     for (n6 && o--; r < o; r++)
       s = e.nameLookup(s, t[r], i);
@@ -5685,7 +5685,7 @@ var Vi = v((Gt, Ui) => {
   function Ke(n6) {
     return n6 && n6.__esModule ? n6 : { default: n6 };
   }
-  var Ja = Kn(), Ya = Ke(Ja), Xa = Sr(), $a = Ke(Xa), Kr = si(), Zr = ui(), el = Gi(), tl = Ke(el), rl = At(), nl = Ke(rl), il = vr(), sl = Ke(il), ol = Ya.default.create;
+  var Qa = Kn(), Ya = Ke(Qa), Xa = Sr(), $a = Ke(Xa), Kr = si(), Zr = ui(), el = Gi(), tl = Ke(el), rl = At(), nl = Ke(rl), il = vr(), sl = Ke(il), ol = Ya.default.create;
   function Wi() {
     var n6 = ol();
     return n6.compile = function(e, t) {
@@ -5793,12 +5793,12 @@ var Ki = v((Wt) => {
     return n6.key + "=" + this.accept(n6.value);
   };
 });
-var Ji = v((Au, Qi) => {
+var Qi = v((Au, Ji) => {
   "use strict";
   var Ut = Vi().default, ji = Ki();
   Ut.PrintVisitor = ji.PrintVisitor;
   Ut.print = ji.print;
-  Qi.exports = Ut;
+  Ji.exports = Ut;
   function Zi(n6, e) {
     var t = _e("fs"), r = t.readFileSync(e, "utf8");
     n6.exports = Ut.compile(r);
@@ -6147,7 +6147,7 @@ var te = class {
     this.messageHandlers[e] = t, console.log(`Message handler added for type: ${e}`);
   }
   send(e, t) {
-    this._isClient ? (console.log("Sending message from client:", e), e.token = this.token, window.parent.postMessage(e, "*")) : console.log("Attempted to send a message from the host without specifying a target.");
+    this._isClient ? (console.log("Sending message from client:", e), e.token = this.token, e = JSON.parse(JSON.stringify(e)), window.parent.postMessage(e, "*")) : console.log("Attempted to send a message from the host without specifying a target.");
   }
   async runServerScript(e, t) {
     return await (await this._httpClient.executeRequest("/api/v1/mercenaries/runscript/" + e, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(t) })).json();
@@ -6251,11 +6251,11 @@ var at = class extends te {
     return await (await this._httpClient.executeRequest(`/api/v1/mercenaries/runscript/${this.extensionId}:` + t, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(r) })).json();
   }
 };
-var Yr = ms(Ji(), 1);
-function Jr() {
+var Yr = ms(Qi(), 1);
+function Qr() {
   return { async: false, baseUrl: null, breaks: false, extensions: null, gfm: true, headerIds: false, headerPrefix: "", highlight: null, hooks: null, langPrefix: "language-", mangle: false, pedantic: false, renderer: null, sanitize: false, sanitizer: null, silent: false, smartypants: false, tokenizer: null, walkTokens: null, xhtml: false };
 }
-var ge = Jr();
+var ge = Qr();
 function rs(n6) {
   ge = n6;
 }
@@ -6265,7 +6265,7 @@ var is = /[<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);)/;
 var pl = new RegExp(is.source, "g");
 var fl = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 var Yi = (n6) => fl[n6];
-function O(n6, e) {
+function L(n6, e) {
   if (e) {
     if (ns.test(n6))
       return n6.replace(hl, Yi);
@@ -6364,13 +6364,13 @@ function wl(n6, e) {
   !n6 || n6.silent || (e && console.warn("marked(): callback is deprecated since version 5.0.0, should not be used and will be removed in the future. Read more here: https://marked.js.org/using_pro#async"), (n6.sanitize || n6.sanitizer) && console.warn("marked(): sanitize and sanitizer parameters are deprecated since version 0.7.0, should not be used and will be removed in the future. Read more here: https://marked.js.org/#/USING_ADVANCED.md#options"), (n6.highlight || n6.langPrefix !== "language-") && console.warn("marked(): highlight and langPrefix parameters are deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-highlight."), n6.mangle && console.warn("marked(): mangle parameter is enabled by default, but is deprecated since version 5.0.0, and will be removed in the future. To clear this warning, install https://www.npmjs.com/package/marked-mangle, or disable by setting `{mangle: false}`."), n6.baseUrl && console.warn("marked(): baseUrl parameter is deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-base-url."), n6.smartypants && console.warn("marked(): smartypants parameter is deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-smartypants."), n6.xhtml && console.warn("marked(): xhtml parameter is deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-xhtml."), (n6.headerIds || n6.headerPrefix) && console.warn("marked(): headerIds and headerPrefix parameters enabled by default, but are deprecated since version 5.0.0, and will be removed in the future. To clear this warning, install  https://www.npmjs.com/package/marked-gfm-heading-id, or disable by setting `{headerIds: false}`."));
 }
 function es(n6, e, t, r) {
-  let i = e.href, s = e.title ? O(e.title) : null, o = n6[1].replace(/\\([\[\]])/g, "$1");
+  let i = e.href, s = e.title ? L(e.title) : null, o = n6[1].replace(/\\([\[\]])/g, "$1");
   if (n6[0].charAt(0) !== "!") {
     r.state.inLink = true;
     let a = { type: "link", raw: t, href: i, title: s, text: o, tokens: r.inlineTokens(o) };
     return r.state.inLink = false, a;
   }
-  return { type: "image", raw: t, href: i, title: s, text: O(o) };
+  return { type: "image", raw: t, href: i, title: s, text: L(o) };
 }
 function xl(n6, e) {
   let t = n6.match(/^(\s+)(?:```)/);
@@ -6387,7 +6387,7 @@ function xl(n6, e) {
   }).join(`
 `);
 }
-var Le = class {
+var Oe = class {
   constructor(e) {
     b(this, "options");
     b(this, "rules");
@@ -6497,7 +6497,7 @@ var Le = class {
     if (t) {
       let r = { type: "html", block: true, raw: t[0], pre: !this.options.sanitizer && (t[1] === "pre" || t[1] === "script" || t[1] === "style"), text: t[0] };
       if (this.options.sanitize) {
-        let i = this.options.sanitizer ? this.options.sanitizer(t[0]) : O(t[0]), s = r;
+        let i = this.options.sanitizer ? this.options.sanitizer(t[0]) : L(t[0]), s = r;
         s.type = "paragraph", s.text = i, s.tokens = this.lexer.inline(i);
       }
       return r;
@@ -6553,12 +6553,12 @@ var Le = class {
   escape(e) {
     let t = this.rules.inline.escape.exec(e);
     if (t)
-      return { type: "escape", raw: t[0], text: O(t[1]) };
+      return { type: "escape", raw: t[0], text: L(t[1]) };
   }
   tag(e) {
     let t = this.rules.inline.tag.exec(e);
     if (t)
-      return !this.lexer.state.inLink && /^<a /i.test(t[0]) ? this.lexer.state.inLink = true : this.lexer.state.inLink && /^<\/a>/i.test(t[0]) && (this.lexer.state.inLink = false), !this.lexer.state.inRawBlock && /^<(pre|code|kbd|script)(\s|>)/i.test(t[0]) ? this.lexer.state.inRawBlock = true : this.lexer.state.inRawBlock && /^<\/(pre|code|kbd|script)(\s|>)/i.test(t[0]) && (this.lexer.state.inRawBlock = false), { type: this.options.sanitize ? "text" : "html", raw: t[0], inLink: this.lexer.state.inLink, inRawBlock: this.lexer.state.inRawBlock, block: false, text: this.options.sanitize ? this.options.sanitizer ? this.options.sanitizer(t[0]) : O(t[0]) : t[0] };
+      return !this.lexer.state.inLink && /^<a /i.test(t[0]) ? this.lexer.state.inLink = true : this.lexer.state.inLink && /^<\/a>/i.test(t[0]) && (this.lexer.state.inLink = false), !this.lexer.state.inRawBlock && /^<(pre|code|kbd|script)(\s|>)/i.test(t[0]) ? this.lexer.state.inRawBlock = true : this.lexer.state.inRawBlock && /^<\/(pre|code|kbd|script)(\s|>)/i.test(t[0]) && (this.lexer.state.inRawBlock = false), { type: this.options.sanitize ? "text" : "html", raw: t[0], inLink: this.lexer.state.inLink, inRawBlock: this.lexer.state.inRawBlock, block: false, text: this.options.sanitize ? this.options.sanitizer ? this.options.sanitizer(t[0]) : L(t[0]) : t[0] };
   }
   link(e) {
     let t = this.rules.inline.link.exec(e);
@@ -6630,7 +6630,7 @@ var Le = class {
     let t = this.rules.inline.code.exec(e);
     if (t) {
       let r = t[2].replace(/\n/g, " "), i = /[^ ]/.test(r), s = /^ /.test(r) && / $/.test(r);
-      return i && s && (r = r.substring(1, r.length - 1)), r = O(r, true), { type: "codespan", raw: t[0], text: r };
+      return i && s && (r = r.substring(1, r.length - 1)), r = L(r, true), { type: "codespan", raw: t[0], text: r };
     }
   }
   br(e) {
@@ -6647,7 +6647,7 @@ var Le = class {
     let r = this.rules.inline.autolink.exec(e);
     if (r) {
       let i, s;
-      return r[2] === "@" ? (i = O(this.options.mangle ? t(r[1]) : r[1]), s = "mailto:" + i) : (i = O(r[1]), s = i), { type: "link", raw: r[0], text: i, href: s, tokens: [{ type: "text", raw: i, text: i }] };
+      return r[2] === "@" ? (i = L(this.options.mangle ? t(r[1]) : r[1]), s = "mailto:" + i) : (i = L(r[1]), s = i), { type: "link", raw: r[0], text: i, href: s, tokens: [{ type: "text", raw: i, text: i }] };
     }
   }
   url(e, t) {
@@ -6655,13 +6655,13 @@ var Le = class {
     if (r = this.rules.inline.url.exec(e)) {
       let i, s;
       if (r[2] === "@")
-        i = O(this.options.mangle ? t(r[0]) : r[0]), s = "mailto:" + i;
+        i = L(this.options.mangle ? t(r[0]) : r[0]), s = "mailto:" + i;
       else {
         let o;
         do
           o = r[0], r[0] = this.rules.inline._backpedal.exec(r[0])[0];
         while (o !== r[0]);
-        i = O(r[0]), r[1] === "www." ? s = "http://" + r[0] : s = r[0];
+        i = L(r[0]), r[1] === "www." ? s = "http://" + r[0] : s = r[0];
       }
       return { type: "link", raw: r[0], text: i, href: s, tokens: [{ type: "text", raw: i, text: i }] };
     }
@@ -6670,7 +6670,7 @@ var Le = class {
     let r = this.rules.inline.text.exec(e);
     if (r) {
       let i;
-      return this.lexer.state.inRawBlock ? i = this.options.sanitize ? this.options.sanitizer ? this.options.sanitizer(r[0]) : O(r[0]) : r[0] : i = O(this.options.smartypants ? t(r[0]) : r[0]), { type: "text", raw: r[0], text: i };
+      return this.lexer.state.inRawBlock ? i = this.options.sanitize ? this.options.sanitizer ? this.options.sanitizer(r[0]) : L(r[0]) : r[0] : i = L(this.options.smartypants ? t(r[0]) : r[0]), { type: "text", raw: r[0], text: i };
     }
   }
 };
@@ -6740,7 +6740,7 @@ var Y = class n4 {
     b(this, "state");
     b(this, "tokenizer");
     b(this, "inlineQueue");
-    this.tokens = [], this.tokens.links = /* @__PURE__ */ Object.create(null), this.options = e || ge, this.options.tokenizer = this.options.tokenizer || new Le(), this.tokenizer = this.options.tokenizer, this.tokenizer.options = this.options, this.tokenizer.lexer = this, this.inlineQueue = [], this.state = { inLink: false, inRawBlock: false, top: true };
+    this.tokens = [], this.tokens.links = /* @__PURE__ */ Object.create(null), this.options = e || ge, this.options.tokenizer = this.options.tokenizer || new Oe(), this.tokenizer = this.options.tokenizer, this.tokenizer.options = this.options, this.tokenizer.lexer = this, this.inlineQueue = [], this.state = { inLink: false, inRawBlock: false, top: true };
     let t = { block: m.normal, inline: d.normal };
     this.options.pedantic ? (t.block = m.pedantic, t.inline = d.pedantic) : this.options.gfm && (t.block = m.gfm, this.options.breaks ? t.inline = d.breaks : t.inline = d.gfm), this.tokenizer.rules = t;
   }
@@ -6923,7 +6923,7 @@ var Y = class n4 {
     return t;
   }
 };
-var Oe = class {
+var Le = class {
   constructor(e) {
     b(this, "options");
     this.options = e || ge;
@@ -6935,8 +6935,8 @@ var Oe = class {
       s != null && s !== e && (r = true, e = s);
     }
     return e = e.replace(/\n$/, "") + `
-`, i ? '<pre><code class="' + this.options.langPrefix + O(i) + '">' + (r ? e : O(e, true)) + `</code></pre>
-` : "<pre><code>" + (r ? e : O(e, true)) + `</code></pre>
+`, i ? '<pre><code class="' + this.options.langPrefix + L(i) + '">' + (r ? e : L(e, true)) + `</code></pre>
+` : "<pre><code>" + (r ? e : L(e, true)) + `</code></pre>
 `;
   }
   blockquote(e) {
@@ -7088,7 +7088,7 @@ var X = class n5 {
     b(this, "renderer");
     b(this, "textRenderer");
     b(this, "slugger");
-    this.options = e || ge, this.options.renderer = this.options.renderer || new Oe(), this.renderer = this.options.renderer, this.renderer.options = this.options, this.textRenderer = new Ze(), this.slugger = new je();
+    this.options = e || ge, this.options.renderer = this.options.renderer || new Le(), this.renderer = this.options.renderer, this.renderer.options = this.options, this.textRenderer = new Ze(), this.slugger = new je();
   }
   static parse(e, t) {
     return new n5(t).parse(e);
@@ -7272,25 +7272,25 @@ var fe = class {
   }
 };
 b(fe, "passThroughHooks", /* @__PURE__ */ new Set(["preprocess", "postprocess"]));
-var Qe;
-var Qr;
+var Je;
+var Jr;
 var jt;
 var os;
 var jr = class {
   constructor(...e) {
-    Xt(this, Qe);
+    Xt(this, Je);
     Xt(this, jt);
-    b(this, "defaults", Jr());
+    b(this, "defaults", Qr());
     b(this, "options", this.setOptions);
-    b(this, "parse", Xe(this, Qe, Qr).call(this, Y.lex, X.parse));
-    b(this, "parseInline", Xe(this, Qe, Qr).call(this, Y.lexInline, X.parseInline));
+    b(this, "parse", Xe(this, Je, Jr).call(this, Y.lex, X.parse));
+    b(this, "parseInline", Xe(this, Je, Jr).call(this, Y.lexInline, X.parseInline));
     b(this, "Parser", X);
     b(this, "parser", X.parse);
-    b(this, "Renderer", Oe);
+    b(this, "Renderer", Le);
     b(this, "TextRenderer", Ze);
     b(this, "Lexer", Y);
     b(this, "lexer", Y.lex);
-    b(this, "Tokenizer", Le);
+    b(this, "Tokenizer", Oe);
     b(this, "Slugger", je);
     b(this, "Hooks", fe);
     this.use(...e);
@@ -7344,7 +7344,7 @@ var jr = class {
         }
         "childTokens" in s && s.childTokens && (t.childTokens[s.name] = s.childTokens);
       }), i.extensions = t), r.renderer) {
-        let s = this.defaults.renderer || new Oe(this.defaults);
+        let s = this.defaults.renderer || new Le(this.defaults);
         for (let o in r.renderer) {
           let a = r.renderer[o], u = o, l = s[u];
           s[u] = (...h) => {
@@ -7355,7 +7355,7 @@ var jr = class {
         i.renderer = s;
       }
       if (r.tokenizer) {
-        let s = this.defaults.tokenizer || new Le(this.defaults);
+        let s = this.defaults.tokenizer || new Oe(this.defaults);
         for (let o in r.tokenizer) {
           let a = r.tokenizer[o], u = o, l = s[u];
           s[u] = (...h) => {
@@ -7395,7 +7395,7 @@ var jr = class {
     return this.defaults = { ...this.defaults, ...e }, this;
   }
 };
-Qe = /* @__PURE__ */ new WeakSet(), Qr = function(e, t) {
+Je = /* @__PURE__ */ new WeakSet(), Jr = function(e, t) {
   return (r, i, s) => {
     typeof i == "function" && (s = i, i = null);
     let o = { ...i }, a = { ...this.defaults, ...o };
@@ -7452,7 +7452,7 @@ Qe = /* @__PURE__ */ new WeakSet(), Qr = function(e, t) {
   return (i) => {
     if (i.message += `
 Please report this to https://github.com/markedjs/marked.`, e) {
-      let s = "<p>An error occurred:</p><pre>" + O(i.message + "", true) + "</pre>";
+      let s = "<p>An error occurred:</p><pre>" + L(i.message + "", true) + "</pre>";
       if (t)
         return Promise.resolve(s);
       if (r) {
@@ -7477,7 +7477,7 @@ function k(n6, e, t) {
 k.options = k.setOptions = function(n6) {
   return de.setOptions(n6), k.defaults = de.defaults, rs(k.defaults), k;
 };
-k.getDefaults = Jr;
+k.getDefaults = Qr;
 k.defaults = ge;
 k.use = function(...n6) {
   return de.use(...n6), k.defaults = de.defaults, rs(k.defaults), k;
@@ -7488,11 +7488,11 @@ k.walkTokens = function(n6, e) {
 k.parseInline = de.parseInline;
 k.Parser = X;
 k.parser = X.parse;
-k.Renderer = Oe;
+k.Renderer = Le;
 k.TextRenderer = Ze;
 k.Lexer = Y;
 k.lexer = Y.lex;
-k.Tokenizer = Le;
+k.Tokenizer = Oe;
 k.Slugger = je;
 k.Hooks = fe;
 k.parse = k;
@@ -7568,9 +7568,7 @@ var data2 = module_default.reactive({
   file: null,
   markdown: null
 });
-debugger;
 var parseContent = async () => {
-  debugger;
   const args2 = new URLSearchParams(location.search);
   const params = JSON.parse(args2.get("q"));
   if (params) {
@@ -7585,7 +7583,8 @@ var parseContent = async () => {
     } else if (params.data) {
       rawText = params.data;
     } else if (params.markdown) {
-      rawText = params.markdown;
+      let result = await sdk.runExtensionScript("markdown", { markdown: params.markdown });
+      rawText = data2.markdown = result.html;
     } else if (params.text) {
       rawText = params.text;
     }
@@ -7687,7 +7686,6 @@ document.addEventListener(
           copyText: "",
           copyNotification: false,
           async copyToClipboard() {
-            alert(this.markdown);
             await navigator.clipboard.writeText(this.markdown);
             this.copyNotification = true;
             let that = this;
