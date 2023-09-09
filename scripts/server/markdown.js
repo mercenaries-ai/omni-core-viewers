@@ -21,6 +21,11 @@ const script = {
 
         return {html}
       }
+      else if (file.mimeType === "text/plain")
+      {
+        let text = file.data.toString()
+        return {html:`<pre>${text}</pre>`, text}
+      }
     }
   },
 };

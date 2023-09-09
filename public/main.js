@@ -7566,6 +7566,7 @@ var showToolbar = !opts.hideToolbar;
 var args = sdk.args;
 var data2 = module_default.reactive({
   file: null,
+  text: null,
   markdown: null
 });
 var parseContent = async () => {
@@ -7587,6 +7588,8 @@ var parseContent = async () => {
       rawText = data2.markdown = result.html;
     } else if (params.text) {
       rawText = params.text;
+      let result = await sdk.runExtensionScript("markdown", { text: params.text });
+      rawText = data2.text = result.text;
     }
     return rawText;
   }

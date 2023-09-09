@@ -22,6 +22,7 @@ const args = sdk.args
 
 let data = Alpine.reactive({
   file: null,
+  text: null,
   markdown: null
 })
 
@@ -60,6 +61,8 @@ const  parseContent = async ()=>
     else if (params.text)
     {
         rawText = params.text
+        let result = await sdk.runExtensionScript('markdown', {text: params.text})
+        rawText = data.text =   result.text
     }
 /*
     const renderer = new marked.Renderer();
