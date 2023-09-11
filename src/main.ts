@@ -20,18 +20,22 @@ const args = sdk.args
 
 
 
+
 let data = Alpine.reactive({
   file: null,
   text: null,
-  markdown: null
+  markdown: null,
+
+})
+
+const uiData = Alpine.reactive({
+  inputs: null
+
 })
 
 const  parseContent = async ()=>
 {
-
-  const args = new URLSearchParams(location.search)
-
-  const params = JSON.parse(args.get('q'))
+  const params = sdk.args
   if (params)
   {
     let rawText = ''
@@ -39,10 +43,12 @@ const  parseContent = async ()=>
     {
 
       data.file = params.file
+
       /*let x = await fetch('/fid/'+params.file.fid)
       rawText = await x.text()*/
       let result = await sdk.runExtensionScript('markdown', {fid: params.file.fid})
       rawText = result.html
+
     }
     else if (params.url)
     {
@@ -64,17 +70,14 @@ const  parseContent = async ()=>
         let result = await sdk.runExtensionScript('markdown', {text: params.text})
         rawText = data.text =   result.text
     }
-/*
-    const renderer = new marked.Renderer();
-      renderer.link = function(href, title, text) {
-          const link = marked.Renderer.prototype.link.apply(this, arguments);
-          return link.replace("<a","<a target='_blank'");
-      };
+    else if (params.recipe)
+    {
+        const result = await sdk.runExtensionScript('ui', {recipe: params.recipe})
+        rawText = result.html
+        uiData.inputs = result.inputs
+        console.log(Alpine.raw(uiData))
+    }
 
-    marked.setOptions({headerIds: false, mangle: false, renderer: renderer})
-    const sanitized = insane(marked.parse( rawText || 'No content'))
-    const final = (params.mdx === true) ? processMdx(sanitized) : sanitized
-*/
     return  rawText
   }
 
@@ -148,24 +151,6 @@ const sendToChat = async (img) => {
 
 const markdownEngine = new MarkdownEngine()
 
-/*
-markdownEngine.registerAsyncResolver("BLOCK", async (token) => {
-
-  return await window.parent.client.blocks.getInstance(token)
-
-});
-
-markdownEngine.registerToken('BUTTON', function(text: string, action: string, options: any) {
-  return new Handlebars.SafeString(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}"  @click="run_button(this)">${text}</button>`)
-});
-
-markdownEngine.registerToken('START_BUTTON', function(text: string, action: string, options: any) {
-  return new Handlebars.SafeString(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' data-action="${action}"  @click="window.parent.client.runScript('run')">Start!</button>`)
-});
-
-
-*/
-
 
 
 const blocks = {}
@@ -227,13 +212,41 @@ const run_button = function(button)
 {
 }
 
+const runAction = async function(button)
+{
+
+ const action = button.getAttribute('data-action')
+
+
+  if (action && action !== 'undefined')
+  {
+
+    let args = Object.keys(uiData.inputs).reduce((acc, key) => {
+      acc[key] = uiData.inputs[key].value
+      return acc
+    }, {})
+
+
+    const payload = {
+      action: 'run',
+      script: action,
+      recipe: { id: sdk.args.recipe.id, version: sdk.args.recipe.version },
+      args: args
+    }
+    const result = await sdk.runExtensionScript('ui',  payload)
+    alert(JSON.stringify(result.result))
+  }
+}
+
 window.Alpine = Alpine
 document.addEventListener('alpine:init', async () => {
   Alpine.data('appState', () => ({
     createContent,
     sendToChat,
     run_button,
+    runAction,
     data,
+    uiData,
     showToolbar,
     blocks: blocks,
     async copyToClipboard() {
