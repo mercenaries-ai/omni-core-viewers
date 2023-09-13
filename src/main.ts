@@ -77,6 +77,13 @@ const  parseContent = async ()=>
         uiData.inputs = result.inputs
         console.log(Alpine.raw(uiData))
     }
+    else if (params.block)
+    {
+        const result = await sdk.runExtensionScript('ui', {block: params.block})
+        rawText = result.html
+        uiData.inputs = result.inputs
+        console.log(Alpine.raw(uiData))
+    }
 
     return  rawText
   }
@@ -227,14 +234,16 @@ const runAction = async function(button)
     }, {})
 
 
-    const payload = {
+    const payload:any = {
       action: 'run',
       script: action,
-      recipe: { id: sdk.args.recipe.id, version: sdk.args.recipe.version },
       args: args
     }
+    if (sdk.args.recipe)  payload.recipe = { id: sdk.args.recipe.id, version: sdk.args.recipe.version }
+    if (sdk.args.block)  payload.block = { id: sdk.args.block.name}
+
     const result = await sdk.runExtensionScript('ui',  payload)
-    alert(JSON.stringify(result.result))
+
   }
 }
 

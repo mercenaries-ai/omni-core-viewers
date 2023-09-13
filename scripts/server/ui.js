@@ -3,7 +3,14 @@
 
 
 
-const prepEngine = async (ctx, recipe, engine, inputs) => {
+const prepEngineBlock = async (ctx, block, engine, inputs) => {
+  engine.registerToken('RUN_BUTTON', function(title) {
+    return new engine.SafeString(`<button class='mt-2' @click='runBlock($el)' data-action='run' data-block='${block.name}'>${title}</button>`);
+  });
+}
+
+
+const prepEngineRecipe = async (ctx, recipe, engine, inputs) => {
 
   engine.registerToken('RUN_BUTTON', function(title) {
     return new engine.SafeString(`<button class='mt-2' @click='runAction($el)' data-action='run' data-args='${encodeURIComponent(JSON.stringify({id: recipe.id, version: recipe.version }))}'>${title}</button>`);
@@ -49,26 +56,37 @@ const script = {
 
     if (payload.action === 'run')
     {
-      const integration = ctx.app.integrations.get('workflow')
-      const recipe = await integration.getWorkflow(payload.recipe.id, payload.recipe.version, ctx.userId, true)
-      const jobService = ctx.app.services.get('jobs')
-      const job = await jobService.startRecipe(recipe, ctx.sessionId, ctx.userId, payload.args, 0, 'system')
-      console.warn ('AAAA', job)
-      let result = await new Promise( (resolve, reject) => {
-        console.log('waiting for job', job.jobId)
-        ctx.app.events.once('jobs.job_finished_' + job.jobId).then( (job) => {
-          resolve(job)
+      let result = {}
+      if (payload.recipe)
+      {
+        const integration = ctx.app.integrations.get('workflow')
+        const recipe = await integration.getWorkflow(payload.recipe.id, payload.recipe.version, ctx.userId, true)
+        const jobService = ctx.app.services.get('jobs')
+        const job = await jobService.startRecipe(recipe, ctx.sessionId, ctx.userId, payload.args, 0, 'system')
+
+        result = await new Promise( (resolve, reject) => {
+          console.log('waiting for job', job.jobId)
+          ctx.app.events.once('jobs.job_finished_' + job.jobId).then( (job) => {
+            resolve(job)
+          })
         })
-      })
-      console.warn('BBBB', result)
+      }
       return {ok: true, result}
-    } else if (payload.recipe)
+    }
+    else if (payload.block)
+    {
+      const blockManager = ctx.app.blocks
+      const block = await blockManager.getInstance(block.name)
+      const engine = new ctx.app.sdkHost.MarkdownEngine();
+      await prepEngineBlock(ctx, block, engine, inputs)
+
+
+    }
+    else if (payload.recipe)
     {
 
       const integration = ctx.app.integrations.get('workflow')
       const recipe = await integration.getWorkflow(payload.recipe.id, payload.recipe.version, ctx.userId, true)
-
-
 
       const ui = Object.values(recipe.rete.nodes).find(n => n.name === 'omnitool.custom_ui_1')
       let html = 'No UI Found'
@@ -83,7 +101,7 @@ const script = {
 
 
         const engine = new ctx.app.sdkHost.MarkdownEngine();
-        await prepEngine(ctx, recipe, engine, inputs)
+        await prepEngineRecipe(ctx, recipe, engine, inputs)
         html = `<div class='omnitool-ui' x-data='uiData'>`
         html += await engine.render(ui.data.source, {          inputs: inputs,          recipe: recipe         } )
         html += `</div>`

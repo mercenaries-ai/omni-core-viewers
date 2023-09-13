@@ -5,6 +5,10 @@ author: Mercenaries.ai Team
 origin: https://github.com/mercenaries-ai/omni-core-viewers.git
 client:
   addToWorkbench: false
+  winbox:
+    autosize: true
+    x: "center"
+    y: "center"
   fileIntents:
     show:
       'application/pdf':

@@ -76,7 +76,7 @@
         font-size: 12px;
         box-shadow: inset -1px -1px grey, inset 1px 1px #dfdfdf,
           inset -2px -2px grey;
-        background: #ece9d8;
+        background: #cecece;
         padding: 3px;
         min-height: 400px;
         border-radius: 0px;
@@ -97,14 +97,14 @@
       <div x-data="{
       menuBarOpen: false,
       menuBarMenu: ''
-  }" @click.away="menuBarOpen=false" class="h-full  relative top-0 left-0 z-50 w-auto transition-all duration-150 ease-out border-l-0 border-r-0 border-t-0">
+  }" @click.away="menuBarOpen=false" class="h-full  relative top-0 left-0 z-50 w-auto transition-all duration-150 ease-out border-0">
         <div class="relative top-0 left-0 z-40 w-auto h-5 transition duration-200 ease-out">
-          <div class="w-full h-full text-sm border rounded-md border-neutral-200/80">
+          <div class="w-full h-full text-sm border-0">
             <div class="flex justify-items-start w-full h-full select-none text-neutral-900">
               <!-- File Button -->
               <div class="relative h-full cursor-default ">
                 <span @click="menuBarOpen=true; menuBarMenu='file'" @mouseover="menuBarMenu='file'" :class="{ '' : menuBarOpen && menuBarMenu == 'file'}" class="rounded text-sm cursor-default flex items-center leading-tight justify-center px-3 py-1.5 h-full hover:bg-neutral-200"> File </span>
-                <div x-show="menuBarOpen && menuBarMenu=='file'" x-transition:enter="transition ease-linear duration-100" x-transition:enter-start="-translate-y-1 opacity-90" x-transition:enter-end="translate-y-0 opacity-100" style="background: rgb(236, 233, 216);" class="absolute top-0 z-50 min-w-[8rem] text-neutral-800 rounded-md border border-neutral-200/70  mt-4 text-sm p-1 shadow-md w-48 -translate-x-0.5" x-cloak>
+                <div x-show="menuBarOpen && menuBarMenu=='file'" x-transition:enter="transition ease-linear duration-100" x-transition:enter-start="-translate-y-1 opacity-90" x-transition:enter-end="translate-y-0 opacity-100" style="background: #cecece" class="absolute top-0 z-50 min-w-[8rem] text-neutral-800 rounded-md border border-neutral-200/70  mt-4 text-sm p-1 shadow-md w-48 -translate-x-0.5" x-cloak>
                   <span @click="menuBarOpen=false" class="relative flex justify-between w-full cursor-default select-none group items-center rounded px-2 py-1.5 hover:bg-gray-200 hover:text-neutral-900 outline-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
                     <span>New Tab</span>
                     <span class="ml-auto text-xs tracking-widest text-neutral-400 group-hover:text-neutral-600">⌘T</span>
@@ -143,7 +143,7 @@
               <!-- Edit Button -->
               <div class="relative h-full cursor-default">
                 <span @click="menuBarOpen=true; menuBarMenu='edit'" @mouseover="menuBarMenu='edit'" :class="{ 'bg-gray-200' : menuBarOpen && menuBarMenu == 'edit'}" class="rounded text-sm cursor-default flex items-center leading-tight justify-center px-3 py-1.5 h-full hover:bg-gray-200"> Edit </span>
-                <div x-show="menuBarOpen && menuBarMenu=='edit'" x-transition:enter="transition ease-linear duration-100" x-transition:enter-start="-translate-y-1 opacity-90" x-transition:enter-end="translate-y-0 opacity-100" style="background: rgb(236, 233, 216);" class="absolute top-0 z-50 min-w-[8rem] text-neutral-800 rounded-md border border-neutral-200/70  mt-4 text-sm p-1 shadow-md w-48 -translate-x-0.5" x-cloak>
+                <div x-show="menuBarOpen && menuBarMenu=='edit'" x-transition:enter="transition ease-linear duration-100" x-transition:enter-start="-translate-y-1 opacity-90" x-transition:enter-end="translate-y-0 opacity-100" style="background: #cecece;" class="absolute top-0 z-50 min-w-[8rem] text-neutral-800 rounded-md border border-neutral-200/70  mt-4 text-sm p-1 shadow-md w-48 -translate-x-0.5" x-cloak>
                   <span @click="menuBarOpen=false" class="relative flex justify-between w-full cursor-default select-none group items-center rounded px-2 py-1.5 hover:bg-gray-200 hover:text-neutral-900 outline-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
                     <span>Undo</span>
                     <span class="ml-auto text-xs tracking-widest text-neutral-400 group-hover:text-neutral-600">⌘Z</span>
