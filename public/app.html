@@ -5,23 +5,32 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.0.1/dist/tailwind.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+
+
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+    </style>
+   <link rel="stylesheet" href="./main.css" />
+   <link rel="stylesheet" href="https://unpkg.com/xp.css" />
     <style>
       .html,
       .body {
         width: 100%;
+        height: 100vh;
         margin: 0;
         padding: 0;
         overflow: hidden;
         min-height: 400px;
+        min-width: 1600px;
         font-family: 'Arial';
         font-size: 12px;
         box-shadow: none;
       }
 
-      h2 {
-        font-size: 16px;
+      h3 {
+        font-size: 22px !important;
       }
 
       button,
@@ -49,6 +58,8 @@
         }
       }
 
+
+
       @media print {
 
         header,
@@ -74,134 +85,45 @@
       }
       .xwindow {
         font-size: 12px;
-        box-shadow: inset -1px -1px grey, inset 1px 1px #dfdfdf,
-          inset -2px -2px grey;
+       /* box-shadow: inset -1px -1px grey, inset 1px 1px #dfdfdf,
+          inset -2px -2px grey;*/
         background: #cecece;
-        padding: 3px;
-        min-height: 400px;
+
+        padding: 1px;
+        height: 100%;
+        width: 100%;
         border-radius: 0px;
         padding: 0 0 3px;
         -webkit-font-smoothing: antialiased;
-        height: 100%;
-        width: 100%;
+
         margin: 0;
         padding: 0;
         overflow: hidden;
       }
     </style>
     <script src="./main.js" type="module" defer></script>
+
   </head>
 
-  <body class="xwindow flex flex-col w-full h-full">
-    <div class="flex border-0 m-0 p-0 flex-col overflow-hidden h-full w-full">
-      <div x-data="{
-      menuBarOpen: false,
-      menuBarMenu: ''
-  }" @click.away="menuBarOpen=false" class="h-full  relative top-0 left-0 z-50 w-auto transition-all duration-150 ease-out border-0">
-        <div class="relative top-0 left-0 z-40 w-auto h-5 transition duration-200 ease-out">
-          <div class="w-full h-full text-sm border-0">
-            <div class="flex justify-items-start w-full h-full select-none text-neutral-900">
-              <!-- File Button -->
-              <div class="relative h-full cursor-default ">
-                <span @click="menuBarOpen=true; menuBarMenu='file'" @mouseover="menuBarMenu='file'" :class="{ '' : menuBarOpen && menuBarMenu == 'file'}" class="rounded text-sm cursor-default flex items-center leading-tight justify-center px-3 py-1.5 h-full hover:bg-neutral-200"> File </span>
-                <div x-show="menuBarOpen && menuBarMenu=='file'" x-transition:enter="transition ease-linear duration-100" x-transition:enter-start="-translate-y-1 opacity-90" x-transition:enter-end="translate-y-0 opacity-100" style="background: #cecece" class="absolute top-0 z-50 min-w-[8rem] text-neutral-800 rounded-md border border-neutral-200/70  mt-4 text-sm p-1 shadow-md w-48 -translate-x-0.5" x-cloak>
-                  <span @click="menuBarOpen=false" class="relative flex justify-between w-full cursor-default select-none group items-center rounded px-2 py-1.5 hover:bg-gray-200 hover:text-neutral-900 outline-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
-                    <span>New Tab</span>
-                    <span class="ml-auto text-xs tracking-widest text-neutral-400 group-hover:text-neutral-600">⌘T</span>
-                  </span>
-                  <span @click="menuBarOpen=false" class="relative flex justify-between w-full cursor-default select-none group items-center rounded px-2 py-1.5 hover:bg-gray-200 hover:text-neutral-900 outline-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
-                    <span>New Window</span>
-                    <span class="ml-auto text-xs tracking-widest text-neutral-400 group-hover:text-neutral-600">⌘N</span>
-                  </span>
-                  <span @click="menuBarOpen=false" class="relative flex justify-between w-full cursor-default select-none group items-center rounded px-2 py-1.5 hover:bg-gray-200 hover:text-neutral-900 outline-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none" data-disabled>
-                    <span>New Incognito Window</span>
-                  </span>
-                  <div class="h-px my-1 -mx-1 "></div>
-                  <span class="relative w-full group">
-                    <div class="flex cursor-default select-none items-center rounded px-2 hover:bg-gray-200 py-1.5 outline-none">
-                      <span>Share</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 ml-auto">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                      </svg>
-                    </div>
-                    <div data-submenu="" class="absolute top-0 right-0 invisible mr-1 duration-200 ease-out translate-x-full opacity-0 group-hover:mr-0 group-hover:visible group-hover:opacity-100">
-                      <div class="z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white p-1 shadow-md animate-in slide-in-from-left-1 w-32">
-                        <div @click="menuBarOpen=false" class="relative flex cursor-default select-none items-center rounded px-2 py-1.5 hover:bg-gray-200 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50">Email link</div>
-                        <div @click="menuBarOpen=false" class="relative flex cursor-default select-none items-center rounded px-2 py-1.5 hover:bg-gray-200 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50">Messages</div>
-                        <div @click="menuBarOpen=false" class="relative flex cursor-default select-none items-center rounded px-2 py-1.5 hover:bg-gray-200 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50">Notes</div>
-                      </div>
-                    </div>
-                  </span>
-                  <div class="h-px my-1 -mx-1"></div>
-                  <span @click="menuBarOpen=false" class="relative flex justify-between w-full cursor-default select-none group items-center rounded px-2 py-1.5 hover:bg-gray-200 hover:text-neutral-900 outline-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
-                    <span>Print</span>
-                    <span class="ml-auto text-xs tracking-widest text-neutral-400 group-hover:text-neutral-600">⌘P</span>
-                  </span>
-                </div>
-              </div>
-              <!-- End File Button -->
-              <!-- Edit Button -->
-              <div class="relative h-full cursor-default">
-                <span @click="menuBarOpen=true; menuBarMenu='edit'" @mouseover="menuBarMenu='edit'" :class="{ 'bg-gray-200' : menuBarOpen && menuBarMenu == 'edit'}" class="rounded text-sm cursor-default flex items-center leading-tight justify-center px-3 py-1.5 h-full hover:bg-gray-200"> Edit </span>
-                <div x-show="menuBarOpen && menuBarMenu=='edit'" x-transition:enter="transition ease-linear duration-100" x-transition:enter-start="-translate-y-1 opacity-90" x-transition:enter-end="translate-y-0 opacity-100" style="background: #cecece;" class="absolute top-0 z-50 min-w-[8rem] text-neutral-800 rounded-md border border-neutral-200/70  mt-4 text-sm p-1 shadow-md w-48 -translate-x-0.5" x-cloak>
-                  <span @click="menuBarOpen=false" class="relative flex justify-between w-full cursor-default select-none group items-center rounded px-2 py-1.5 hover:bg-gray-200 hover:text-neutral-900 outline-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
-                    <span>Undo</span>
-                    <span class="ml-auto text-xs tracking-widest text-neutral-400 group-hover:text-neutral-600">⌘Z</span>
-                  </span>
-                  <span @click="menuBarOpen=false" class="relative flex justify-between w-full cursor-default select-none group items-center rounded px-2 py-1.5 hover:bg-gray-200 hover:text-neutral-900 outline-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
-                    <span>Redo</span>
-                    <span class="ml-auto text-xs tracking-widest text-neutral-400 group-hover:text-neutral-600">⇧⌘Z</span>
-                  </span>
-                  <div class="h-px my-1 -mx-1 bg-neutral-200"></div>
-                  <span class="relative w-full group">
-                    <div class="flex cursor-default select-none items-center rounded px-2 hover:bg-gray-200 py-1.5 outline-none">
-                      <span>Find</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 ml-auto">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                      </svg>
-                    </div>
-                    <div data-submenu="" class="absolute top-0 right-0 invisible mr-1 duration-200 ease-out translate-x-full opacity-0 group-hover:mr-0 group-hover:visible group-hover:opacity-100">
-                      <div class="z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white p-1 shadow-md animate-in slide-in-from-left-1 w-32">
-                        <div @click="menuBarOpen=false" class="relative flex cursor-default select-none items-center rounded px-2 py-1.5 hover:bg-gray-200 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50">Search the web</div>
-                        <div class="h-px my-1 -mx-1 bg-neutral-200"></div>
-                        <div @click="menuBarOpen=false" class="relative flex cursor-default select-none items-center rounded px-2 py-1.5 hover:bg-gray-200 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50">Find...</div>
-                        <div @click="menuBarOpen=false" class="relative flex cursor-default select-none items-center rounded px-2 py-1.5 hover:bg-gray-200 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50">Find Next</div>
-                        <div @click="menuBarOpen=false" class="relative flex cursor-default select-none items-center rounded px-2 py-1.5 hover:bg-gray-200 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50">Find Previous</div>
-                      </div>
-                    </div>
-                  </span>
-                  <div class="h-px my-1 -mx-1 bg-neutral-200"></div>
-                  <span @click="menuBarOpen=false" class="relative flex justify-between w-full cursor-default select-none group items-center rounded px-2 py-1.5 hover:bg-gray-200 hover:text-neutral-900 outline-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
-                    <span>Cut</span>
-                  </span>
-                  <span @click="menuBarOpen=false" class="relative flex justify-between w-full cursor-default select-none group items-center rounded px-2 py-1.5 hover:bg-gray-200 hover:text-neutral-900 outline-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
-                    <span>Copy</span>
-                  </span>
-                  <span @click="menuBarOpen=false" class="relative flex justify-between w-full cursor-default select-none group items-center rounded px-2 py-1.5 hover:bg-gray-200 hover:text-neutral-900 outline-none data-[disabled]:opacity-50 data-[disabled]:pointer-events-none">
-                    <span>Paste</span>
-                  </span>
-                </div>
-              </div>
-              <!-- End Edit Button -->
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="window-body h-full" x-data="appState">
+  <body class="xwindow" x-data="appState">
+    <div class="flex flex-col w-full h-full">
+      <div class="window-body " >
         <div id='content' x-html="html" x-data="createContent()" class="">
         </div>
+
       </div>
 
     </div>
-    <div class="flex-grow"></div>
-    <div class="status-bar">
-      <p class="status-bar-field">Press F1 for help</p>
-      <p class="status-bar-field">Slide 1</p>
-      <p class="status-bar-field">
-        <span aria-busy="true" aria-describedby="progress-bar" class="hidden"> </span>
-        <progress id="progress-bar" aria-label="Content loading…"></progress></p>
-    </div>
+    <div class="flex-grow   relative inline-flex h-6 py-0.5 ml-4 focus:outline-none rounded-full w-10"></div>
 
+  </div>
+  <div class="status-bar" style="position: fixed; bottom: 0px; width:100%;">
+    <p class="status-bar-field">Press F1 for help</p>
+    <p class="status-bar-field">Slide 1</p>
+    <p class="status-bar-field">
+      <span aria-busy="busy" aria-describedby="progress-bar" class="hidden"> </span>
+      <progress x-show="busy" id="progress-bar" aria-label="Content loading…"></progress></p>
+  </div>
   </body>
 
 </html>

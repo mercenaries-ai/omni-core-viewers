@@ -1,6 +1,5 @@
 import Handlebars, { HelperDelegate } from 'handlebars';
 import Alpine from 'alpinejs';
-import './style.scss';
 import {OmniSDKClient} from 'omni-sdk';
 import {MarkdownEngine} from 'omni-sdk';
 
@@ -13,10 +12,86 @@ declare global {
 }
 
 
+const prepEngineRecipe = async ( recipe, engine, inputs) => {
+
+  engine.registerToken('RUN_BUTTON', function(title) {
+    return new engine.SafeString(`<button class='mt-2' @click='runAction($el)' data-action='run' data-args='${encodeURIComponent(JSON.stringify({id: recipe.id, version: recipe.version }))}'>${title}</button>`);
+  });
+
+  engine.registerToken('INPUT', function(input, nop) {
+    if (input)
+    {
+
+      const title = nop || input.title || input.name
+
+      if (input.type === 'boolean')
+      {
+        return new engine.SafeString(`
+
+        <div  class="field-row-stacked  flex items-left justify-left space-x-2">
+
+        <label @click="$refs.switchButton_${input.name}.click(); $refs.switchButton_${input.name}.focus()" :id="$id('switch')"
+            class="mt-2 mb-0 pb-0 font-semibold select-none cursor-pointer"
+            x-cloak>
+            ${title}
+        </label>
+        <input id="switch_${input.name}" type="checkbox" name="switch" class='hidden' :checked="inputs.${input.name}.value">
+        <button
+            x-ref="switchButton_${input.name}"
+            type="button"
+            @click="inputs.${input.name}.value = ! inputs.${input.name}.value"
+
+            :class="inputs.${input.name}.value ? 'bg-blue-600' : 'bg-neutral-200'"
+            class="relative inline-flex h-6 py-0.5 ml-4 focus:outline-none rounded-full w-10"
+            x-cloak>
+            <span :class="inputs.${input.name}.value ? 'translate-x-[18px]' : 'translate-x-0.5'" class="w-5 h-5 duration-200 ease-in-out bg-white rounded-full shadow-md"
+            ></span>
+        </button>
+
+    </div>
+
+
+
+      `);
+
+      }
+
+      return new engine.SafeString(`
+      <div class="field-row-stacked" style="min-width: 200px">
+        <label x-text='inputs.${input.name}.title' class='mt-2 mb-0 pb-0 font-semibold'> </label>
+        <input type='text' x-model='inputs.${input.name}.value' />
+        </div>
+      `);
+    }
+    else
+    {
+      return new engine.SafeString(`ERROR` + input);
+    }
+  });
+
+
+  engine.registerToken('RECIPE', function(field) {
+    if (field)
+    {
+      return new engine.SafeString(`
+      ${field}`)
+    }
+    else
+    {
+      return new engine.SafeString(`ERROR` + field);
+    }
+  });
+
+}
+
+
+
 // -------------------- Viewer Mode: If q.focusedItem is set, we hide the gallery and show the item full screen -----------------------
 const opts = sdk.options
 const showToolbar = !opts.hideToolbar;
 const args = sdk.args
+
+
 
 
 
@@ -73,9 +148,18 @@ const  parseContent = async ()=>
     else if (params.recipe)
     {
         const result = await sdk.runExtensionScript('ui', {recipe: params.recipe})
-        rawText = result.html
+        const engine = new MarkdownEngine();
+        await prepEngineRecipe( result.recipe, engine, result.inputs)
+        const ui:any = Object.values(result.recipe.rete.nodes).find((n:any) => n.name === 'omnitool.custom_ui_1')
+        let html
+        html = `<div class='omnitool-ui flex flex-col' x-data='uiData'>`
+        html += await engine.render(ui.data.source, {          inputs: result.inputs,          recipe: result.recipe         } )
+        html +='<div class="flex-grow"></div>'
+        html += `</div>`
+
+        rawText = html
         uiData.inputs = result.inputs
-        console.log(Alpine.raw(uiData))
+
     }
     else if (params.block)
     {
@@ -156,6 +240,8 @@ const sendToChat = async (img) => {
 
 
 
+const blocks = {}
+/*
 const markdownEngine = new MarkdownEngine()
 
 
@@ -197,8 +283,7 @@ markdownEngine.registerToken('BLOCK', function(token, options) {
   return `<div>Block ${token} not found</div>`
 
 });
-
-
+*/
 const createContent = function () {
 
   return  {
@@ -228,10 +313,12 @@ const runAction = async function(button)
   if (action && action !== 'undefined')
   {
 
+
     let args = Object.keys(uiData.inputs).reduce((acc, key) => {
       acc[key] = uiData.inputs[key].value
       return acc
     }, {})
+
 
 
     const payload:any = {
@@ -241,8 +328,9 @@ const runAction = async function(button)
     }
     if (sdk.args.recipe)  payload.recipe = { id: sdk.args.recipe.id, version: sdk.args.recipe.version }
     if (sdk.args.block)  payload.block = { id: sdk.args.block.name}
-
+    this.busy = true
     const result = await sdk.runExtensionScript('ui',  payload)
+    this.busy = false
 
   }
 }
@@ -254,6 +342,7 @@ document.addEventListener('alpine:init', async () => {
     sendToChat,
     run_button,
     runAction,
+    busy: false,
     data,
     uiData,
     showToolbar,

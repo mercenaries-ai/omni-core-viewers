@@ -7564,6 +7564,61 @@ var as = class {
 
 // main.ts
 var sdk = new at("omni-core-viewers").init();
+var prepEngineRecipe = async (recipe, engine, inputs) => {
+  engine.registerToken("RUN_BUTTON", function(title) {
+    return new engine.SafeString(`<button class='mt-2' @click='runAction($el)' data-action='run' data-args='${encodeURIComponent(JSON.stringify({ id: recipe.id, version: recipe.version }))}'>${title}</button>`);
+  });
+  engine.registerToken("INPUT", function(input, nop) {
+    if (input) {
+      const title = nop || input.title || input.name;
+      if (input.type === "boolean") {
+        return new engine.SafeString(`
+
+        <div  class="field-row-stacked  flex items-left justify-left space-x-2">
+
+        <label @click="$refs.switchButton_${input.name}.click(); $refs.switchButton_${input.name}.focus()" :id="$id('switch')"
+            class="mt-2 mb-0 pb-0 font-semibold select-none cursor-pointer"
+            x-cloak>
+            ${title}
+        </label>
+        <input id="switch_${input.name}" type="checkbox" name="switch" class='hidden' :checked="inputs.${input.name}.value">
+        <button
+            x-ref="switchButton_${input.name}"
+            type="button"
+            @click="inputs.${input.name}.value = ! inputs.${input.name}.value"
+
+            :class="inputs.${input.name}.value ? 'bg-blue-600' : 'bg-neutral-200'"
+            class="relative inline-flex h-6 py-0.5 ml-4 focus:outline-none rounded-full w-10"
+            x-cloak>
+            <span :class="inputs.${input.name}.value ? 'translate-x-[18px]' : 'translate-x-0.5'" class="w-5 h-5 duration-200 ease-in-out bg-white rounded-full shadow-md"
+            ></span>
+        </button>
+
+    </div>
+
+
+
+      `);
+      }
+      return new engine.SafeString(`
+      <div class="field-row-stacked" style="min-width: 200px">
+        <label x-text='inputs.${input.name}.title' class='mt-2 mb-0 pb-0 font-semibold'> </label>
+        <input type='text' x-model='inputs.${input.name}.value' />
+        </div>
+      `);
+    } else {
+      return new engine.SafeString(`ERROR` + input);
+    }
+  });
+  engine.registerToken("RECIPE", function(field) {
+    if (field) {
+      return new engine.SafeString(`
+      ${field}`);
+    } else {
+      return new engine.SafeString(`ERROR` + field);
+    }
+  });
+};
 var opts = sdk.options;
 var showToolbar = !opts.hideToolbar;
 var args = sdk.args;
@@ -7597,9 +7652,16 @@ var parseContent = async () => {
       rawText = data2.text = result.text;
     } else if (params.recipe) {
       const result = await sdk.runExtensionScript("ui", { recipe: params.recipe });
-      rawText = result.html;
+      const engine = new as();
+      await prepEngineRecipe(result.recipe, engine, result.inputs);
+      const ui2 = Object.values(result.recipe.rete.nodes).find((n6) => n6.name === "omnitool.custom_ui_1");
+      let html;
+      html = `<div class='omnitool-ui flex flex-col' x-data='uiData'>`;
+      html += await engine.render(ui2.data.source, { inputs: result.inputs, recipe: result.recipe });
+      html += '<div class="flex-grow"></div>';
+      html += `</div>`;
+      rawText = html;
       uiData.inputs = result.inputs;
-      console.log(module_default.raw(uiData));
     } else if (params.block) {
       const result = await sdk.runExtensionScript("ui", { block: params.block });
       rawText = result.html;
@@ -7652,29 +7714,7 @@ var sendToChat = async (img) => {
     }, ["no-picture"]);
   }
 };
-var markdownEngine = new as();
 var blocks = {};
-markdownEngine.registerToken("BLOCK", function(token, options) {
-  const block = this[token];
-  const html = [];
-  if (block && Object.keys(block)) {
-    blocks[token] = block;
-    html.push(`<div> `);
-    html.push(`<div class='p-2 font-semibold text-lg'>${block.title || block.displayOperationId}</div>`);
-    if (block.description) {
-      html.push(`<p class='flex-grow p-2'>${block.description}</p>`);
-    }
-    html.push(`<div style='display: flex;resize: horizontal; border: 1px solid black;'> `);
-    html.push(`<table x-data='blocks["${token}"]'>`);
-    html.push(`</table>
-  <div class='flex-grow p-2' x-text='__result'>Output</div>`);
-    html.push(`<button class='m-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow' @click="block.run()">Run</button>`);
-    html.push(`</div>`);
-    html.push(`</div>`);
-    return html.join("");
-  }
-  return `<div>Block ${token} not found</div>`;
-});
 var createContent = function() {
   return {
     html: "",
@@ -7691,6 +7731,7 @@ var run_button = function(button) {
 var runAction = async function(button) {
   const action = button.getAttribute("data-action");
   if (action && action !== "undefined") {
+
     let args2 = Object.keys(uiData.inputs).reduce((acc, key) => {
       acc[key] = uiData.inputs[key].value;
       return acc;
@@ -7704,7 +7745,9 @@ var runAction = async function(button) {
       payload.recipe = { id: sdk.args.recipe.id, version: sdk.args.recipe.version };
     if (sdk.args.block)
       payload.block = { id: sdk.args.block.name };
+    this.busy = true;
     const result = await sdk.runExtensionScript("ui", payload);
+    this.busy = false;
   }
 };
 window.Alpine = module_default;
@@ -7716,6 +7759,7 @@ document.addEventListener(
       sendToChat,
       run_button,
       runAction,
+      busy: false,
       data: data2,
       uiData,
       showToolbar,
