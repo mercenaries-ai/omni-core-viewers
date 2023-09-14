@@ -7604,16 +7604,16 @@ var prepEngineRecipe = async (recipe, engine, inputs) => {
       <div class="field-row-stacked" style="min-width: 200px">
         <label x-text='inputs.${input.name}.title' class='mt-2 mb-0 pb-0 font-semibold'> </label>
         <input type='text' x-model='inputs.${input.name}.value' />
+        <label x-show="inputs.${input.name}.description" x-text='inputs.${input.name}.description' class='mt-2 mb-0 pb-0 font-semibold w-full text-right'> </label>
         </div>
       `);
     } else {
       return new engine.SafeString(`ERROR` + input);
     }
   });
-  engine.registerToken("RECIPE", function(field) {
+  engine.registerToken("RECIPE", function(field, class_name) {
     if (field) {
-      return new engine.SafeString(`
-      ${field}`);
+      return new engine.SafeString(`<div class='${class_name}'>${field}</div>`);
     } else {
       return new engine.SafeString(`ERROR` + field);
     }
@@ -7731,7 +7731,6 @@ var run_button = function(button) {
 var runAction = async function(button) {
   const action = button.getAttribute("data-action");
   if (action && action !== "undefined") {
-
     let args2 = Object.keys(uiData.inputs).reduce((acc, key) => {
       acc[key] = uiData.inputs[key].value;
       return acc;

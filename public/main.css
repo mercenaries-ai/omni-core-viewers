@@ -6387,6 +6387,10 @@ video {
   padding-bottom: 0px;
 }
 
+.text-right {
+  text-align: right;
+}
+
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -9473,6 +9477,26 @@ $main-color: #e9f1f4;
     background: transparent;
     border-radius: 10px;
   }
+}
+
+.banner
+{
+  background-color: #eee;
+  width: 105%;
+  color: white;
+  font-weight: 500;
+  display: flex;
+  border: 1px inset black;
+  border-radius: 4px;
+  padding: 20px;
+  box-shadow: inset -1px -1px gray, inset 1px 1px #dfdfdf, inset -2px -2px #ddd;
+  min-height: 50px;
+  justify-content: center;
+  place-items: center;
+  background: linear-gradient(90deg, gray 22%, #ccc 100%);
+  text-shadow: 1px 1px 1px black;
+  margin-left: -10px;
+  margin-right: -10px;
 }
 
 .hover\:bg-blue-100:hover {
@@ -12606,4 +12630,3 @@ $main-color: #e9f1f4;
     background-color: rgb(153 27 27 / 0.95);
   }
 }
-

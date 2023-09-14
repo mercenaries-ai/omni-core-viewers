@@ -56,10 +56,12 @@ const prepEngineRecipe = async ( recipe, engine, inputs) => {
 
       }
 
+
       return new engine.SafeString(`
       <div class="field-row-stacked" style="min-width: 200px">
         <label x-text='inputs.${input.name}.title' class='mt-2 mb-0 pb-0 font-semibold'> </label>
         <input type='text' x-model='inputs.${input.name}.value' />
+        <label x-show="inputs.${input.name}.description" x-text='inputs.${input.name}.description' class='mt-2 mb-0 pb-0 font-semibold w-full text-right'> </label>
         </div>
       `);
     }
@@ -70,11 +72,10 @@ const prepEngineRecipe = async ( recipe, engine, inputs) => {
   });
 
 
-  engine.registerToken('RECIPE', function(field) {
+  engine.registerToken('RECIPE', function(field, class_name) {
     if (field)
     {
-      return new engine.SafeString(`
-      ${field}`)
+      return new engine.SafeString(`<div class='${class_name}'>${field}</div>`);
     }
     else
     {

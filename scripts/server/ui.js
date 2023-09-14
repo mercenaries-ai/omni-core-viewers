@@ -88,12 +88,13 @@ const script = {
 
   exec: async function (ctx, payload) {
     console.log("RUNSCRIPT UI", payload)
-
+    debugger;
     if (payload.action === 'run')
     {
       let result = {}
       if (payload.recipe)
       {
+
         const integration = ctx.app.integrations.get('workflow')
         const recipe = await integration.getWorkflow(payload.recipe.id, payload.recipe.version, ctx.userId, true)
         const jobService = ctx.app.services.get('jobs')

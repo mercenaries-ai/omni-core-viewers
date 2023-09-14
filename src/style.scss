@@ -30,4 +30,23 @@
     border-radius: 10px;
   }
 }
+.banner
+{
+  background-color: #eee;
+  width: 105%;
+  color: white;
+  font-weight: 500;
 
+  display: flex;
+  border: 1px inset black;
+  border-radius: 4px;
+  padding: 20px;
+  box-shadow: inset -1px -1px gray, inset 1px 1px #dfdfdf, inset -2px -2px #ddd;
+  min-height: 50px;
+  justify-content: center;
+  place-items: center;
+  background: linear-gradient(90deg, gray 22%, #ccc 100%);
+  text-shadow: 1px 1px 1px black;
+  margin-left: -10px;
+  margin-right: -10px;
+}
