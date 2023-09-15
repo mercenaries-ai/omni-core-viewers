@@ -88,7 +88,6 @@ const script = {
 
   exec: async function (ctx, payload) {
     console.log("RUNSCRIPT UI", payload)
-    debugger;
     if (payload.action === 'run')
     {
       let result = {}
