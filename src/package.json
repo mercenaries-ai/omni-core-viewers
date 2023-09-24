@@ -4,6 +4,9 @@
   "scripts": {
     "build": "npx tailwindcss -i style.scss -o ../public/main.css && node ./build.mjs"
   },
+  "externals": [
+    "omni-sdk"
+  ],
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "latest",
     "@tailwindcss/forms": "latest",
@@ -20,7 +23,6 @@
     "alpinejs": "^3.12.3",
     "assignment": "2.2.0",
     "handlebars": "^4.7.8",
-    "marked": "^7.0.3",
-    "omni-sdk": "link:../../../../omni-sdk/"
+    "marked": "^7.0.3"
   }
 }
