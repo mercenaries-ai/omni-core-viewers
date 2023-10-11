@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2023 MERCENARIES.AI PTE. LTD.
+ * All rights reserved.
+ */
+
 import Handlebars, { HelperDelegate } from 'handlebars';
 import Alpine from 'alpinejs';
 import {OmniSDKClient} from 'omni-sdk';
