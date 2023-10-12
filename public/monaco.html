@@ -22,7 +22,13 @@
         const args = new URLSearchParams(location.search)
         let rawText = ''
         const params = JSON.parse(args.get('q'))
-          if (params.url)
+
+          if (params.file && params.file.fid)
+          {
+            let x = await fetch('/fid/'+params.file.fid)
+            rawText = await x.text()
+          }
+          else if (params.url)
           {
               let x = await fetch(params.url)
               rawText = await x.text()
@@ -103,6 +109,7 @@
                        document.getElementById(monacoId).editor = monaco.editor.create($refs.monacoEditorElement, {
                         value: window._item,
                         readOnly: true,
+                        wordWrap: 'on',
                         fontSize: monacoFontSize,
                         lineNumbers: 'off',
                         //lineNumbersMinChars: 3,
