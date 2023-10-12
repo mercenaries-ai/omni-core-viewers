@@ -7674,7 +7674,6 @@ var parseContent = async () => {
   if (params) {
     let rawText = "";
     if (params.file && params.file.fid) {
-      debugger;
       data2.file = params.file;
       let result = await sdk.runExtensionScript("markdown", { fid: params.file.fid });
       rawText = result.html;

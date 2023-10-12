@@ -13,7 +13,7 @@ export default {
   safelist:[
     'border-2', 'hidden', 'font-semibold', 'font-bold', 'font-normal',
     {
-      pattern: /bg-(red|green|blue|orange)-(100|600|800)/,
+      pattern: /bg-(red|green|blue|orange|grey|gray)-(50|100|600|800)/,
       variants: ['lg', 'hover', 'focus', 'lg:hover'],
     },
     'block', 'flex', 'inline-flex',
