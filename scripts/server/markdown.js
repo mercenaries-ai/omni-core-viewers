@@ -19,14 +19,14 @@ const script = {
 
       let file = await ctx.app.cdn.getByFid(payload.fid)
       const engine = new ctx.app.sdkHost.MarkdownEngine();
-      if (file.mimeType === "text/markdown")
+      if (file.mimeType.startsWith("text/markdown"))
       {
         let text = file.data.toString()
         let html = await engine.render(text)
 
         return {html}
       }
-      else if (file.mimeType === "text/plain")
+      else if (file.mimeType.startsWith("text/plain"))
       {
         let text = file.data.toString()
         return {html:`<pre>${text}</pre>`, text}
