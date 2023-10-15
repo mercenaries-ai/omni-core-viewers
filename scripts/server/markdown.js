@@ -6,32 +6,37 @@
 const script = {
   name: 'markdown',
 
+  formatHTML: async(ctx, markdown, text) => {
+    let html = `<pre>Invalid input, code: 818</pre>`
+    if (markdown) {
+      const engine = new ctx.app.sdkHost.MarkdownEngine();
+      html = await engine.render(markdown)
+    } else if (text) {
+      html = `<pre>${text}</pre>`
+    }
+    return { html, markdown }
+  },
+
   exec: async function (ctx, payload) {
-    console.log(payload)
-    if (payload.markdown)
-    {
-      const engine = new ctx.app.sdkHost.MarkdownEngine();
-      let html = await engine.render(payload.markdown)
-      return {html}
-    }
-    else if (payload.fid)
-    {
 
-      let file = await ctx.app.cdn.getByFid(payload.fid)
-      const engine = new ctx.app.sdkHost.MarkdownEngine();
-      if (file.mimeType.startsWith("text/markdown"))
-      {
-        let text = file.data.toString()
-        let html = await engine.render(text)
+    console.log("+TTYU", payload)
+    let text = payload.text ?? payload.data?.toString()
+    let markdown = payload.markdown
+    let fid = payload?.file?.fid || payload.fid
+    let mimeType = payload.mimeType || payload?.file?.mimeType
 
-        return {html}
-      }
-      else if (file.mimeType.startsWith("text/plain"))
-      {
-        let text = file.data.toString()
-        return {html:`<pre>${text}</pre>`, text}
-      }
+    if (fid) {
+      const file = await ctx.app.cdn.getByFid(fid)
+      text = file.data.toString()
+      mimeType = file.mimeType
     }
+
+    if (text && mimeType?.startsWith("text/markdown")) {
+      markdown = text
+    }
+
+    console.log("-TTYU", markdown, text)
+    return await this.formatHTML(ctx, markdown, text)
   },
 };
 

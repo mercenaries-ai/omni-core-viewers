@@ -3,7 +3,6 @@
  * All rights reserved.
  */
 
-import Handlebars, { HelperDelegate } from 'handlebars';
 import Alpine from 'alpinejs';
 import {OmniSDKClient} from 'omni-sdk';
 import {MarkdownEngine} from 'omni-sdk';
@@ -114,71 +113,54 @@ const uiData = Alpine.reactive({
 
 })
 
-const  parseContent = async ()=>
+const parseContent = async ()=>
 {
   const params = sdk.args
-  if (params)
+  let rawText = ''
+  if (!params)
   {
-    let rawText = ''
-    if (params.file && params.file.fid)
-    {
+    rawText = ''
+  }
+  if (params?.file?.fid || params.markdown || params.text)
+  {
+    data.file = params.file
+    let result = await sdk.runExtensionScript('markdown', params)
+    rawText = result.html
+    data.markdown = result.markdown
+  }
+  else if (params.url)
+  {
+    let x = await fetch(params.url)
+    const text = await x.text()
+    const markdown = params.url.endsWith('.md') ? text : null
+    let result = await sdk.runExtensionScript('markdown', {markdown, text})
+    rawText = result.html
+    data.markdown = result.markdown
+  }
+  else if (params.recipe)
+  {
+    const result = await sdk.runExtensionScript('ui', {recipe: params.recipe})
+    const engine = new MarkdownEngine();
+    await prepEngineRecipe( result.recipe, engine, result.inputs)
+    const ui:any = Object.values(result.recipe.rete.nodes).find((n:any) => n.name === 'omnitool.custom_ui_1')
+    let html = `<div class='omnitool-ui flex flex-col' x-data='uiData'>`
+    html += await engine.render(ui.data.source, { inputs: result.inputs, recipe: result.recipe } )
+    html +='<div class="flex-grow"></div>'
+    html += `</div>`
 
-      data.file = params.file
-
-      /*let x = await fetch('/fid/'+params.file.fid)
-      rawText = await x.text()*/
-      let result = await sdk.runExtensionScript('markdown', {fid: params.file.fid})
-      rawText = result.html
-
-    }
-    else if (params.url)
-    {
-        let x = await fetch(params.url)
-        rawText = await x.text()
-    }
-    else if (params.data)
-    {
-        rawText = params.data
-    }
-    else if (params.markdown)
-    {
-      let result = await sdk.runExtensionScript('markdown', {markdown: params.markdown})
-      rawText = data.markdown =   result.html
-    }
-    else if (params.text)
-    {
-        rawText = params.text
-        let result = await sdk.runExtensionScript('markdown', {text: params.text})
-        rawText = data.text =   result.text
-    }
-    else if (params.recipe)
-    {
-        const result = await sdk.runExtensionScript('ui', {recipe: params.recipe})
-        const engine = new MarkdownEngine();
-        await prepEngineRecipe( result.recipe, engine, result.inputs)
-        const ui:any = Object.values(result.recipe.rete.nodes).find((n:any) => n.name === 'omnitool.custom_ui_1')
-        let html
-        html = `<div class='omnitool-ui flex flex-col' x-data='uiData'>`
-        html += await engine.render(ui.data.source, {          inputs: result.inputs,          recipe: result.recipe         } )
-        html +='<div class="flex-grow"></div>'
-        html += `</div>`
-
-        rawText = html
-        uiData.inputs = result.inputs
-
-    }
-    else if (params.block)
-    {
-        const result = await sdk.runExtensionScript('ui', {block: params.block})
-        rawText = result.html
-        uiData.inputs = result.inputs
-        console.log(Alpine.raw(uiData))
-    }
-
-    return  rawText
+    rawText = html
+    data.text = rawText
+    uiData.inputs = result.inputs
+  }
+  else if (params.block)
+  {
+    const result = await sdk.runExtensionScript('ui', {block: params.block})
+    uiData.inputs = result.inputs
+    rawText = result.html
+    data.text = rawText
   }
 
-  return ''
+  return rawText
 }
 
 const sendToChat = async (img) => {

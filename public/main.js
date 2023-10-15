@@ -7681,45 +7681,41 @@ var uiData = module_default.reactive({
 });
 var parseContent = async () => {
   const params = sdk.args;
-  if (params) {
-    let rawText = "";
-    if (params.file && params.file.fid) {
-      data2.file = params.file;
-      let result = await sdk.runExtensionScript("markdown", { fid: params.file.fid });
-      rawText = result.html;
-    } else if (params.url) {
-      let x = await fetch(params.url);
-      rawText = await x.text();
-    } else if (params.data) {
-      rawText = params.data;
-    } else if (params.markdown) {
-      let result = await sdk.runExtensionScript("markdown", { markdown: params.markdown });
-      rawText = data2.markdown = result.html;
-    } else if (params.text) {
-      rawText = params.text;
-      let result = await sdk.runExtensionScript("markdown", { text: params.text });
-      rawText = data2.text = result.text;
-    } else if (params.recipe) {
-      const result = await sdk.runExtensionScript("ui", { recipe: params.recipe });
-      const engine = new ns();
-      await prepEngineRecipe(result.recipe, engine, result.inputs);
-      const ui2 = Object.values(result.recipe.rete.nodes).find((n6) => n6.name === "omnitool.custom_ui_1");
-      let html;
-      html = `<div class='omnitool-ui flex flex-col' x-data='uiData'>`;
-      html += await engine.render(ui2.data.source, { inputs: result.inputs, recipe: result.recipe });
-      html += '<div class="flex-grow"></div>';
-      html += `</div>`;
-      rawText = html;
-      uiData.inputs = result.inputs;
-    } else if (params.block) {
-      const result = await sdk.runExtensionScript("ui", { block: params.block });
-      rawText = result.html;
-      uiData.inputs = result.inputs;
-      console.log(module_default.raw(uiData));
-    }
-    return rawText;
+  let rawText = "";
+  if (!params) {
+    rawText = "";
   }
-  return "";
+  if (params?.file?.fid || params.markdown || params.text) {
+    data2.file = params.file;
+    let result = await sdk.runExtensionScript("markdown", params);
+    rawText = result.html;
+    data2.markdown = result.markdown;
+  } else if (params.url) {
+    let x = await fetch(params.url);
+    const text = await x.text();
+    const markdown = params.url.endsWith(".md") ? text : null;
+    let result = await sdk.runExtensionScript("markdown", { markdown, text });
+    rawText = result.html;
+    data2.markdown = result.markdown;
+  } else if (params.recipe) {
+    const result = await sdk.runExtensionScript("ui", { recipe: params.recipe });
+    const engine = new ns();
+    await prepEngineRecipe(result.recipe, engine, result.inputs);
+    const ui2 = Object.values(result.recipe.rete.nodes).find((n6) => n6.name === "omnitool.custom_ui_1");
+    let html = `<div class='omnitool-ui flex flex-col' x-data='uiData'>`;
+    html += await engine.render(ui2.data.source, { inputs: result.inputs, recipe: result.recipe });
+    html += '<div class="flex-grow"></div>';
+    html += `</div>`;
+    rawText = html;
+    data2.text = rawText;
+    uiData.inputs = result.inputs;
+  } else if (params.block) {
+    const result = await sdk.runExtensionScript("ui", { block: params.block });
+    uiData.inputs = result.inputs;
+    rawText = result.html;
+    data2.text = rawText;
+  }
+  return rawText;
 };
 var sendToChat = async (img) => {
   if (!img)
