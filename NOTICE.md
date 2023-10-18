@@ -1,5 +1,5 @@
-Omnitool.ai utilizes a variety of open-source software components.
-Presented below is a list of these components, along with the complete texts of their corresponding license agreements.
+Each Omnitool.ai core Extension utilizes a variety of open-source software components.
+Presented below is a list of the components for this core Extension, along with the complete texts of their corresponding license agreements.
 Relevant information regarding the third-party vendors mentioned below has been gathered through common and reasonable methods.
 
 ---
