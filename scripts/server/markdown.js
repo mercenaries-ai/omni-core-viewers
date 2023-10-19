@@ -19,7 +19,6 @@ const script = {
 
   exec: async function (ctx, payload) {
 
-    console.log("+TTYU", payload)
     let text = payload.text ?? payload.data?.toString()
     let markdown = payload.markdown
     let fid = payload?.file?.fid || payload.fid
