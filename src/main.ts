@@ -159,7 +159,14 @@ const parseContent = async ()=>
     rawText = result.html
     data.text = rawText
   }
-
+  else if (params.video) {
+    rawText = `
+    <video controls autoplay muted>
+      <source src="${args.video}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>`;
+  }
+  
   return rawText
 }
 
