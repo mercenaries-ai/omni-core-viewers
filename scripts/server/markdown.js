@@ -35,7 +35,7 @@ const script = {
       markdown = text
     }
 
-    console.log("-TTYU", markdown, text)
+
     return await this.formatHTML(ctx, markdown, text)
   },
 };
