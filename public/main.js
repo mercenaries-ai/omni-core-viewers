@@ -6369,8 +6369,7 @@ var ot = class extends te {
     if (t.type !== "custom_extension_event")
       return;
     let r = t;
-    debugger;
-    r.extensionId === this.extensionId && this.events.emit("custom_event", [{ eventId: r.eventId, eventArgs: r.eventArgs }]);
+    r.extensionId === this.extensionId && this.events.emit("custom_event", { eventId: r.eventId, eventArgs: r.eventArgs });
   }
   async _handleSyncData(t) {
     if (t.type !== "host_sync_data")
